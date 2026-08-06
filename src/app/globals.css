@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf6ef;
+  --foreground: #3a2a22;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Wedding palette — see /Users/mitzivite/.claude/plans/playful-dancing-dawn.md */
+  --color-ivory: #faf6ef;
+  --color-champagne: #efe1c4;
+  --color-blush: #e8c9c2;
+  --color-gold: #be9b4d;
+  --color-wine: #6b1e2b;
+  --color-coffee: #3a2a22;
+  --color-greenery: #7c8b6c;
+
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-raleway);
+  --font-sans: var(--font-body);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
