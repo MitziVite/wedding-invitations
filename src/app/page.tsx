@@ -1,27 +1,53 @@
-import { copy } from "@/content/copy/es";
+"use client";
+
+import { useEffect, useLayoutEffect } from "react";
+import { useReducedMotion } from "framer-motion";
+import { GardenHero } from "@/components/hero/GardenHero";
+import { EnvelopeIntro } from "@/components/envelope/EnvelopeIntro";
+import { useEnvelopeState } from "@/components/envelope/useEnvelopeState";
+
+const SESSION_KEY = "envelope-intro-seen";
+const REPLAY_PARAM = "replay-intro";
 
 export default function Home() {
+  const [stage, dispatch] = useEnvelopeState();
+  const reducedMotion = Boolean(useReducedMotion());
+
+  useLayoutEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get(REPLAY_PARAM) === "1") {
+      window.sessionStorage.removeItem(SESSION_KEY);
+      return;
+    }
+    if (window.sessionStorage.getItem(SESSION_KEY) === "1") {
+      dispatch({ type: "SKIP" });
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (stage === "done") {
+      window.sessionStorage.setItem(SESSION_KEY, "1");
+      document.body.style.overflow = "";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [stage]);
+
   return (
-    <main className="flex flex-1 items-center justify-center px-6 py-24">
-      <section className="w-full max-w-md rounded-md border border-gold bg-wine px-8 py-10 text-center">
-        <p className="mb-4 font-body text-xs tracking-[0.2em] text-champagne uppercase">
-          {copy.eyebrow}
-        </p>
-        <h1 className="mb-2 font-display text-4xl text-ivory">
-          {copy.siteTitle}
-        </h1>
-        <p className="mb-6 font-body text-champagne">{copy.date}</p>
-        <div className="mx-auto mb-6 h-0.5 w-10 bg-gold" />
-        <p className="mb-8 font-body text-sm leading-relaxed text-ivory">
-          {copy.intro}
-        </p>
-        <button
-          type="button"
-          className="rounded-sm border border-blush bg-blush px-6 py-3 font-body text-sm tracking-wide text-coffee uppercase"
-        >
-          {copy.rsvpCta}
-        </button>
-      </section>
+    <main className="relative h-[100svh] w-full overflow-hidden">
+      <GardenHero revealed={stage !== "idle"} reducedMotion={reducedMotion} />
+      {stage !== "done" && (
+        <EnvelopeIntro
+          stage={stage}
+          reducedMotion={reducedMotion}
+          onOpen={() => dispatch({ type: "OPEN" })}
+          onComplete={() => dispatch({ type: "COMPLETE" })}
+          onSkip={() => dispatch({ type: "SKIP" })}
+        />
+      )}
     </main>
   );
 }
