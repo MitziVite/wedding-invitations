@@ -10,9 +10,21 @@ interface EnvelopePanelProps {
   reducedMotion: boolean;
 }
 
+/**
+ * *-panel-trimmed.png are derived assets (see the asset-prep step): each is
+ * the original left/right panel's already-known-clean texture region
+ * (excludes the vignette background and a black decorative border baked
+ * into the source art), cropped tight with no rotation. Because the mobile
+ * wrapper is now a genuinely fullscreen, aspect-unconstrained box (its slot
+ * aspect varies a lot by device — much narrower/taller on a phone than the
+ * old fixed 5:7 layout ever produced), plain `object-fit: cover` on these
+ * pre-cropped clean images is what guarantees full, gap-free coverage at
+ * any aspect — the same pattern already proven for the desktop panels,
+ * rather than the fragile manual crop-percentage math used previously.
+ */
 const PANEL_IMAGE_SRC: Record<Side, string> = {
-  left: "/images/envelope/left-panel.png",
-  right: "/images/envelope/right-panel.png",
+  left: "/images/envelope/left-panel-trimmed.png",
+  right: "/images/envelope/right-panel-trimmed.png",
 };
 
 const OPEN_ROTATION_DEG: Record<Side, number> = {
@@ -25,7 +37,7 @@ export function EnvelopePanel({ side, isOpen, reducedMotion }: EnvelopePanelProp
 
   return (
     <motion.div
-      className={`absolute top-0 h-full w-1/2 ${isLeft ? "left-0" : "right-0"}`}
+      className={`absolute top-0 h-full w-1/2 overflow-hidden ${isLeft ? "left-0" : "right-0"}`}
       style={{
         transformOrigin: isLeft ? "left center" : "right center",
         backfaceVisibility: "hidden",
@@ -51,8 +63,8 @@ export function EnvelopePanel({ side, isOpen, reducedMotion }: EnvelopePanelProp
       <img
         src={PANEL_IMAGE_SRC[side]}
         alt=""
-        className="h-full w-full object-cover"
         draggable={false}
+        className="absolute inset-0 h-full w-full object-cover"
       />
     </motion.div>
   );

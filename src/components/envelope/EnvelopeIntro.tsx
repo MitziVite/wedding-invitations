@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import type { EnvelopeStage } from "./useEnvelopeState";
-import { EnvelopePanel } from "./EnvelopePanel";
-import { WaxSeal } from "./WaxSeal";
+import { IntroBackdrop } from "./IntroBackdrop";
+import { EnvelopeIntroDesktop } from "./EnvelopeIntroDesktop";
+import { EnvelopeIntroMobile } from "./EnvelopeIntroMobile";
 
 const OPEN_DURATION_MS = 1900;
 const REDUCED_MOTION_DURATION_MS = 650;
@@ -16,6 +17,14 @@ interface EnvelopeIntroProps {
   onSkip: () => void;
 }
 
+/**
+ * Orchestrates the shared, stage-driven concerns (opening timer, backdrop,
+ * skip control) and renders two presentational layout variants side by
+ * side, toggled purely by CSS breakpoint (matching how GardenHero already
+ * switches its art via a media query rather than JS) — desktop opens
+ * top/bottom, mobile opens left/right. Only one is ever visible at a time;
+ * `display:none` also removes the hidden one from the tab order.
+ */
 export function EnvelopeIntro({
   stage,
   reducedMotion,
@@ -33,20 +42,11 @@ export function EnvelopeIntro({
   }, [stage, reducedMotion, onComplete]);
 
   return (
-    <div
-      className="absolute inset-0 flex items-center justify-center px-6"
-      style={{ perspective: 1800 }}
-    >
-      <div className="relative aspect-[2/3] h-[78svh] max-h-[640px]">
-        <EnvelopePanel side="left" isOpen={isOpen} reducedMotion={reducedMotion} />
-        <EnvelopePanel side="right" isOpen={isOpen} reducedMotion={reducedMotion} />
-        <WaxSeal
-          isOpen={isOpen}
-          disabled={stage !== "idle"}
-          reducedMotion={reducedMotion}
-          onOpen={onOpen}
-        />
-      </div>
+    <div className="absolute inset-0">
+      <IntroBackdrop isOpen={isOpen} reducedMotion={reducedMotion} />
+
+      <EnvelopeIntroDesktop stage={stage} reducedMotion={reducedMotion} onOpen={onOpen} />
+      <EnvelopeIntroMobile stage={stage} reducedMotion={reducedMotion} onOpen={onOpen} />
 
       <button
         type="button"

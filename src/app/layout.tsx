@@ -6,6 +6,7 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
 });
 
 const raleway = Raleway({
