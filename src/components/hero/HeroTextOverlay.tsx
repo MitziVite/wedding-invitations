@@ -49,18 +49,18 @@ export function HeroTextOverlay({
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
-          width: "min(88vw, 880px)",
-          height: "min(64vh, 560px)",
+          width: "min(92vw, 940px)",
+          height: "min(70vh, 600px)",
           background:
-            "radial-gradient(ellipse 62% 58% at 50% 50%, rgba(18,13,10,0.4) 0%, rgba(18,13,10,0.24) 42%, rgba(18,13,10,0) 78%)",
+            "radial-gradient(ellipse 62% 58% at 50% 50%, rgba(16,11,8,0.62) 0%, rgba(16,11,8,0.42) 44%, rgba(16,11,8,0) 80%)",
         }}
       />
 
       <div
         className="relative flex flex-col items-center text-center"
         style={{
-          color: "#F2E2C8",
-          textShadow: "0 1px 3px rgba(20,14,10,0.45), 0 4px 18px rgba(20,14,10,0.35)",
+          color: "#F5E7C6",
+          textShadow: "0 1px 4px rgba(18,12,8,0.7), 0 6px 24px rgba(18,12,8,0.55)",
         }}
       >
         <WaveText
@@ -70,7 +70,7 @@ export function HeroTextOverlay({
           reducedMotion={reducedMotion}
           startDelay={INITIALS_DELAY}
           step={0.07}
-          className="font-display font-medium text-balance"
+          className="font-display font-semibold text-balance"
           style={{ fontSize: "clamp(5rem, 11vw, 10rem)", letterSpacing: "0.06em", lineHeight: 0.97 }}
         />
 
