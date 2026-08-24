@@ -28,3 +28,28 @@ body {
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
+
+/* A soft warm glow that breathes slowly around the couple's initials — an
+   enchanted, "fairy-lit" touch layered over their dark legibility shadow. */
+@keyframes fairy-initials-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 216, 140, 0.35))
+      drop-shadow(0 0 15px rgba(255, 198, 120, 0.22));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(255, 228, 165, 0.6))
+      drop-shadow(0 0 26px rgba(255, 206, 132, 0.42));
+  }
+}
+
+.fairy-initials {
+  animation: fairy-initials-glow 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fairy-initials {
+    animation: none;
+    filter: drop-shadow(0 0 9px rgba(255, 216, 140, 0.4));
+  }
+}

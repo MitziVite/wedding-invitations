@@ -199,7 +199,6 @@ export function GardenHero({
       <SparkleField revealed={revealed} reducedMotion={reducedMotion} />
 
       <HeroTextOverlay
-        initials="J & M"
         subtitle="Our forever begins here"
         date="November 7, 2026"
         visible={typographyVisible}

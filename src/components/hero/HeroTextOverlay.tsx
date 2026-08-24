@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { TopDivider } from "./TopDivider";
 import { BottomDivider } from "./BottomDivider";
 import { WaveText } from "./WaveText";
+import { MonogramLockup } from "./MonogramLockup";
 
 interface HeroTextOverlayProps {
-  initials: string;
   subtitle: string;
   date: string;
   visible: boolean;
@@ -28,7 +28,6 @@ const DATE_DELAY = 1.2;
  * to fire as the garden finishes resolving — see GardenHero).
  */
 export function HeroTextOverlay({
-  initials,
   subtitle,
   date,
   visible,
@@ -63,15 +62,11 @@ export function HeroTextOverlay({
           textShadow: "0 1px 4px rgba(18,12,8,0.7), 0 6px 24px rgba(18,12,8,0.55)",
         }}
       >
-        <WaveText
-          as="h1"
-          text={initials}
+        <MonogramLockup
           visible={visible}
           reducedMotion={reducedMotion}
           startDelay={INITIALS_DELAY}
-          step={0.07}
-          className="font-display font-semibold text-balance"
-          style={{ fontSize: "clamp(5rem, 11vw, 10rem)", letterSpacing: "0.06em", lineHeight: 0.97 }}
+          className="fairy-initials"
         />
 
         <motion.div

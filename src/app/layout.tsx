@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Raleway } from "next/font/google";
+import { Cormorant_Garamond, Raleway, Bodoni_Moda, Allura } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -15,6 +15,18 @@ const raleway = Raleway({
   weight: ["300", "400", "500", "600"],
 });
 
+// The couple's monogram: J and M in Bodoni Moda, the ampersand in Allura.
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+});
+const allura = Allura({
+  variable: "--font-allura",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
 export const metadata: Metadata = {
   title: "J & M — Nuestra boda",
   description: "Invitación de boda de J & M — 7 de noviembre de 2026.",
@@ -24,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${cormorant.variable} ${raleway.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${raleway.variable} ${bodoniModa.variable} ${allura.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-coffee">
         {children}

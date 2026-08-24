@@ -27,7 +27,7 @@ export default function Home() {
 
   useLayoutEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    // Calibration mode skips the envelope so the full garden is clickable.
+    // Calibration mode skips the envelope so the full garden is shown immediately.
     if (params.get(CALIBRATE_PARAM) === "1") {
       dispatch({ type: "SKIP" });
       return;
