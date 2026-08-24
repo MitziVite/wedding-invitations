@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HeroTextOverlay } from "./HeroTextOverlay";
 import { GardenLanternGlow } from "./GardenLanternGlow";
-import { RaindropCell } from "./RaindropCell";
-import { useElementSize } from "./useElementSize";
-import {
-  generateRaindrops,
-  GARDEN_INTRINSIC,
-  FULL_FADE_START_S,
-  FULL_FADE_DURATION_S,
-  REVEAL_COMPLETE_S,
-  DEBUG_SPEED_MULTIPLIER,
-} from "./gardenRaindrops";
+import { SparkleField } from "./SparkleField";
 
 const GARDEN_SRC = "/images/hero/garden-desktop.png";
+
+// The garden resolves out of a soft luminous haze (a dreamy, "magical"
+// focus-in), a warm dawn-bloom blooms from the sunset and fades, then the
+// hero text waves in.
+const IMAGE_REVEAL_S = 1.9;
+const TEXT_START_S = 1.45;
+const DEBUG_TARGET_S = 5.5;
+const DEBUG_SPEED_MULTIPLIER = DEBUG_TARGET_S / IMAGE_REVEAL_S;
 
 interface GardenHeroProps {
   revealed: boolean;
@@ -31,57 +30,32 @@ interface LanternSpot {
   pulseDuration: number;
 }
 
-/** Positions of a few visible lanterns in the garden artwork, timed to ignite as the reveal fills in. */
 const LANTERN_SPOTS: LanternSpot[] = [
-  { x: 8, y: 47, size: 70, delay: 1.0, pulseDuration: 3.2 },
-  { x: 24, y: 83, size: 60, delay: 1.2, pulseDuration: 3.6 },
-  { x: 52, y: 66, size: 55, delay: 0.7, pulseDuration: 4.0 },
-  { x: 83, y: 76, size: 65, delay: 1.35, pulseDuration: 4.4 },
+  { x: 8, y: 47, size: 70, delay: 0.9, pulseDuration: 3.2 },
+  { x: 24, y: 83, size: 60, delay: 1.05, pulseDuration: 3.6 },
+  { x: 52, y: 66, size: 55, delay: 0.75, pulseDuration: 4.0 },
+  { x: 83, y: 76, size: 65, delay: 1.2, pulseDuration: 4.4 },
 ];
 
 export function GardenHero({ revealed, reducedMotion, debugReveal = false }: GardenHeroProps) {
-  const [containerRef, { width, height }] = useElementSize<HTMLDivElement>();
-  const drops = useMemo(() => generateRaindrops(), []);
   const speed = debugReveal ? DEBUG_SPEED_MULTIPLIER : 1;
 
   // Read once at mount: a returning visitor within the session (revealed
-  // already true) skips straight to the settled state; reduced motion also
-  // skips the raindrops for a plain quick fade.
+  // already true) starts settled, without replaying the reveal.
   const [typographyVisible, setTypographyVisible] = useState(revealed);
-  const [dropsMounted, setDropsMounted] = useState(!revealed && !reducedMotion);
 
   useEffect(() => {
     if (!revealed || typographyVisible) return;
-    const revealMs = reducedMotion ? 300 : REVEAL_COMPLETE_S * speed * 1000 + 150;
-    const textTimer = window.setTimeout(() => setTypographyVisible(true), revealMs);
-    // Free the per-drop compositor layers once the full image has taken
-    // over (skip in debug so the drops stay inspectable).
-    const dropTimer =
-      debugReveal || reducedMotion
-        ? undefined
-        : window.setTimeout(() => setDropsMounted(false), revealMs + 400);
-    return () => {
-      window.clearTimeout(textTimer);
-      if (dropTimer) window.clearTimeout(dropTimer);
-    };
-  }, [revealed, reducedMotion, typographyVisible, debugReveal, speed]);
+    const delayMs = reducedMotion ? 300 : TEXT_START_S * speed * 1000;
+    const timer = window.setTimeout(() => setTypographyVisible(true), delayMs);
+    return () => window.clearTimeout(timer);
+  }, [revealed, reducedMotion, typographyVisible, speed]);
 
-  // Cover-fit math so each drop's slice of the image lines up exactly with
-  // the full-image layer underneath/over it.
-  const coverScale =
-    width > 0 && height > 0
-      ? Math.max(width / GARDEN_INTRINSIC.width, height / GARDEN_INTRINSIC.height)
-      : 0;
-  const coverW = GARDEN_INTRINSIC.width * coverScale;
-  const coverH = GARDEN_INTRINSIC.height * coverScale;
-  const offsetX = (width - coverW) / 2;
-  const offsetY = (height - coverH) / 2;
-  const minDim = Math.min(width, height);
-  const canRenderDrops = dropsMounted && width > 0 && height > 0;
+  const imageDuration = reducedMotion ? 0.45 : IMAGE_REVEAL_S * speed;
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-hidden">
-      {/* Warm dark ground — the only thing visible before the reveal starts. */}
+    <div className="relative h-full w-full overflow-hidden">
+      {/* Warm dark ground beneath the haze, so there's no hard flash. */}
       <div
         className="absolute inset-0"
         style={{
@@ -90,46 +64,38 @@ export function GardenHero({ revealed, reducedMotion, debugReveal = false }: Gar
         }}
       />
 
-      {/* Raindrops: each falls, ripples, and reveals its slice of the garden. */}
-      {canRenderDrops &&
-        drops.map((drop, i) => {
-          const diameter = drop.sizeFactor * minDim;
-          const r = diameter / 2;
-          const left = drop.fx * width - r;
-          const top = drop.fy * height - r;
-          return (
-            <RaindropCell
-              key={i}
-              revealed={revealed}
-              baseDelay={drop.delay * speed}
-              speed={speed}
-              debug={debugReveal}
-              left={left}
-              top={top}
-              diameter={diameter}
-              backgroundSize={`${coverW}px ${coverH}px`}
-              backgroundPosition={`${offsetX - left}px ${offsetY - top}px`}
-            />
-          );
-        })}
-
-      {/* Full garden layer: fades in at the end to complete coverage seamlessly. */}
+      {/* Garden: resolves from a soft, dim, desaturated haze into full clarity. */}
       <motion.picture
         className="absolute inset-0 block h-full w-full"
         initial={false}
-        animate={{ opacity: revealed ? 1 : 0 }}
-        transition={{
-          delay: reducedMotion ? 0 : FULL_FADE_START_S * speed,
-          duration: reducedMotion ? 0.4 : FULL_FADE_DURATION_S * speed,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        animate={
+          revealed
+            ? { opacity: 1, scale: 1, filter: "blur(0px) saturate(1) brightness(1)" }
+            : { opacity: 0, scale: 1.06, filter: "blur(9px) saturate(0.8) brightness(0.82)" }
+        }
+        transition={{ duration: imageDuration, ease: [0.22, 1, 0.36, 1] }}
       >
         <source media="(min-width: 768px)" srcSet={GARDEN_SRC} />
         {/* eslint-disable-next-line @next/next/no-img-element -- <picture> art-direction switching isn't supported by next/image */}
         <img src={GARDEN_SRC} alt="" className="h-full w-full object-cover" />
       </motion.picture>
 
-      {/* A few lanterns gently illuminating as the scene fills in. */}
+      {/* Dawn bloom: a warm glow swells from the sunset and dissolves. */}
+      <motion.div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 52% 40%, rgba(255,214,150,0.6) 0%, rgba(255,196,120,0.22) 32%, rgba(255,196,120,0) 58%)",
+          mixBlendMode: "screen",
+        }}
+        initial={false}
+        animate={revealed ? { opacity: [0, 0.9, 0] } : { opacity: 0 }}
+        transition={{ duration: imageDuration, times: [0, 0.35, 1], ease: "easeOut" }}
+      />
+
+      <SparkleField revealed={revealed} reducedMotion={reducedMotion} />
+
+      {/* A few lanterns gently illuminating as the scene resolves. */}
       {LANTERN_SPOTS.map((spot, i) => (
         <GardenLanternGlow
           key={i}

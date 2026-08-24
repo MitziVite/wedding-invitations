@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { TopDivider } from "./TopDivider";
 import { BottomDivider } from "./BottomDivider";
+import { WaveText } from "./WaveText";
 
 interface HeroTextOverlayProps {
   initials: string;
@@ -13,11 +14,18 @@ interface HeroTextOverlayProps {
   className?: string;
 }
 
+// Each block's wave begins a beat after the previous one, so the whole
+// composition assembles top-to-bottom like it's being written by magic.
+const INITIALS_DELAY = 0;
+const DIVIDER1_DELAY = 0.4;
+const SUBTITLE_DELAY = 0.55;
+const DIVIDER2_DELAY = 1.05;
+const DATE_DELAY = 1.2;
+
 /**
- * Centered couple-names / subtitle / date composition for the garden hero.
- * Animates in as a staggered sequence (initials -> divider -> subtitle ->
- * divider -> date) once `visible` is set — intended to fire after the
- * garden's own painterly reveal completes (see GardenHero), not on mount.
+ * Centered couple-names / subtitle / date composition for the garden hero,
+ * revealed as a staggered per-character wave once `visible` is set (intended
+ * to fire as the garden finishes resolving — see GardenHero).
  */
 export function HeroTextOverlay({
   initials,
@@ -27,29 +35,17 @@ export function HeroTextOverlay({
   reducedMotion,
   className = "",
 }: HeroTextOverlayProps) {
-  const container: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: reducedMotion ? 0 : 0.16 },
-    },
-  };
-
-  const item: Variants = {
-    hidden: { opacity: 0, y: reducedMotion ? 0 : 14 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reducedMotion ? 0.3 : 0.75, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
+  const dividerTransition = (delay: number) => ({
+    delay: reducedMotion ? 0 : delay,
+    duration: reducedMotion ? 0.3 : 0.6,
+    ease: [0.22, 1, 0.36, 1] as const,
+  });
 
   return (
     <div
       className={`pointer-events-none absolute inset-0 flex items-center justify-center px-6 ${className}`}
     >
-      {/* Soft radial contrast layer — a gentle spotlight dimming behind the
-          text, not a visible box, so the copy separates from the busiest
-          part of the garden image without flattening it. */}
+      {/* Soft radial contrast layer — a gentle spotlight, not a visible box. */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
@@ -60,60 +56,62 @@ export function HeroTextOverlay({
         }}
       />
 
-      <motion.div
+      <div
         className="relative flex flex-col items-center text-center"
         style={{
           color: "#F2E2C8",
           textShadow: "0 1px 3px rgba(20,14,10,0.45), 0 4px 18px rgba(20,14,10,0.35)",
         }}
-        initial="hidden"
-        animate={visible ? "visible" : "hidden"}
-        variants={container}
       >
-        <motion.h1
-          variants={item}
+        <WaveText
+          as="h1"
+          text={initials}
+          visible={visible}
+          reducedMotion={reducedMotion}
+          startDelay={INITIALS_DELAY}
+          step={0.07}
           className="font-display font-medium text-balance"
-          style={{
-            fontSize: "clamp(5rem, 11vw, 10rem)",
-            letterSpacing: "0.06em",
-            lineHeight: 0.97,
-          }}
-        >
-          {initials}
-        </motion.h1>
+          style={{ fontSize: "clamp(5rem, 11vw, 10rem)", letterSpacing: "0.06em", lineHeight: 0.97 }}
+        />
 
-        <motion.div variants={item} className="mt-5">
+        <motion.div
+          className="mt-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: visible ? 1 : 0 }}
+          transition={dividerTransition(DIVIDER1_DELAY)}
+        >
           <TopDivider />
         </motion.div>
 
-        <motion.p
-          variants={item}
+        <WaveText
+          text={subtitle}
+          visible={visible}
+          reducedMotion={reducedMotion}
+          startDelay={SUBTITLE_DELAY}
+          step={0.024}
           className="font-display text-balance mt-6 italic"
-          style={{
-            fontSize: "clamp(1.6rem, 3.2vw, 3.2rem)",
-            letterSpacing: "0.02em",
-            lineHeight: 1.2,
-          }}
-        >
-          {subtitle}
-        </motion.p>
+          style={{ fontSize: "clamp(1.6rem, 3.2vw, 3.2rem)", letterSpacing: "0.02em", lineHeight: 1.2 }}
+        />
 
-        <motion.div variants={item} className="mt-5">
+        <motion.div
+          className="mt-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: visible ? 1 : 0 }}
+          transition={dividerTransition(DIVIDER2_DELAY)}
+        >
           <BottomDivider />
         </motion.div>
 
-        <motion.p
-          variants={item}
+        <WaveText
+          text={date}
+          visible={visible}
+          reducedMotion={reducedMotion}
+          startDelay={DATE_DELAY}
+          step={0.035}
           className="font-display mt-5 font-medium"
-          style={{
-            fontSize: "clamp(1.1rem, 1.8vw, 2rem)",
-            letterSpacing: "0.06em",
-            lineHeight: 1.2,
-          }}
-        >
-          {date}
-        </motion.p>
-      </motion.div>
+          style={{ fontSize: "clamp(1.1rem, 1.8vw, 2rem)", letterSpacing: "0.06em", lineHeight: 1.2 }}
+        />
+      </div>
     </div>
   );
 }
