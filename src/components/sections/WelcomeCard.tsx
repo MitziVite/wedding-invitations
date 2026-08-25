@@ -95,24 +95,37 @@ export function WelcomeCard() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-b from-transparent to-ivory" />
       </div>
 
-      {/* Framed date + live countdown. */}
+      {/* Framed date + live countdown.
+          All three rows (month / day number / weekday) share ONE grid with
+          identical 1fr-auto-1fr column tracks, so the flanking space is
+          computed once for the whole block — not per-row — guaranteeing the
+          day number sits in exactly the same center column as both label
+          rows. The day number also uses lining figures: Cormorant
+          Garamond's default numerals are oldstyle figures, whose glyph ink
+          isn't symmetric within its own advance box (that asymmetry, not
+          any layout issue, was what made the "7" look off-center). */}
       <div className="mx-auto max-w-md px-6 pt-6 pb-20 text-center">
-        <div className="flex items-center justify-center gap-4">
-          <span className="h-px flex-1 bg-gold/40" />
-          <span className="font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
+        <div
+          className="grid items-center gap-x-4 gap-y-2"
+          style={{ gridTemplateColumns: "1fr auto 1fr" }}
+        >
+          <span className="h-px bg-gold/40" aria-hidden="true" />
+          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
             {welcome.monthName}
           </span>
-          <span className="h-px flex-1 bg-gold/40" />
-        </div>
+          <span className="h-px bg-gold/40" aria-hidden="true" />
 
-        <p className="my-2 font-display text-7xl leading-none text-coffee">{welcome.day}</p>
+          <span aria-hidden="true" />
+          <p className="lining-nums justify-self-center font-display text-7xl leading-none text-coffee">
+            {welcome.day}
+          </p>
+          <span aria-hidden="true" />
 
-        <div className="flex items-center justify-center gap-4">
-          <span className="h-px flex-1 bg-gold/40" />
-          <span className="font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
+          <span className="h-px bg-gold/40" aria-hidden="true" />
+          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
             {weekday} · {welcome.year}
           </span>
-          <span className="h-px flex-1 bg-gold/40" />
+          <span className="h-px bg-gold/40" aria-hidden="true" />
         </div>
 
         <p className="mt-10 mb-5 font-body text-xs tracking-[0.3em] text-wine uppercase">Faltan</p>

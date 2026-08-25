@@ -7,6 +7,8 @@ import { EnvelopeIntro } from "@/components/envelope/EnvelopeIntro";
 import { useEnvelopeState } from "@/components/envelope/useEnvelopeState";
 import { FairyCursor } from "@/components/FairyCursor";
 import { WeddingSections } from "@/components/sections/WeddingSections";
+import { useBackgroundMusic } from "@/components/audio/BackgroundMusicProvider";
+import { MuteToggle } from "@/components/audio/MuteToggle";
 
 const SESSION_KEY = "envelope-intro-seen";
 const REPLAY_PARAM = "replay-intro";
@@ -20,6 +22,7 @@ function hasParam(name: string) {
 export default function Home() {
   const [stage, dispatch] = useEnvelopeState();
   const reducedMotion = Boolean(useReducedMotion());
+  const { startMusic } = useBackgroundMusic();
   // Lazy initializers (not effects) so these read the URL once, on the
   // client, without a synchronous setState-in-effect call. Guarded for SSR,
   // where `window` doesn't exist during the server render pass.
@@ -69,7 +72,12 @@ export default function Home() {
             <EnvelopeIntro
               stage={stage}
               reducedMotion={reducedMotion}
-              onOpen={() => dispatch({ type: "OPEN" })}
+              onOpen={() => {
+                dispatch({ type: "OPEN" });
+                // The seal click is the primary, required user gesture that
+                // starts the music — never autoplayed before this.
+                startMusic();
+              }}
               onComplete={() => dispatch({ type: "COMPLETE" })}
               onSkip={() => dispatch({ type: "SKIP" })}
             />
@@ -79,6 +87,7 @@ export default function Home() {
         <WeddingSections />
       </main>
       <FairyCursor />
+      {stage === "done" && <MuteToggle />}
     </>
   );
 }

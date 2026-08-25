@@ -5,14 +5,14 @@
  * placeholders too — swap them for the real ones.
  */
 export const weddingContent = {
-  coupleNames: "Josh & Mitzi",
+  coupleNames: "Mitzi & Josh",
   date: "7 de noviembre de 2026",
   weekday: "Sábado",
 
   welcome: {
     // The couple's photo. Leave empty to show the placeholder block.
     photoSrc: "/images/novios/portrait.jpg",
-    photoAlt: "Josh y Mitzi",
+    photoAlt: "Mitzi y Josh",
     monthName: "Noviembre",
     day: "7",
     year: "2026",
@@ -32,10 +32,11 @@ export const weddingContent = {
     imageSrc: "/images/novios/temple.svg",
     imageAlt: "Ilustración del templo",
     time: "10:00 a. m.",
-    place: "[Nombre del lugar de la ceremonia]",
-    address: "[Dirección de la ceremonia]",
+    place: "Templo de Saratoga Springs",
+    address: "987 South Ensign Drive, Saratoga Springs, UT 84045-3839",
     note: "Te esperamos para unir nuestras vidas ante Dios.",
-    mapUrl: "#",
+    mapUrl:
+      "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
   },
 
   reception: {
@@ -44,10 +45,11 @@ export const weddingContent = {
     imageSrc: "/images/novios/reception.svg",
     imageAlt: "Ilustración del salón de recepción",
     time: "4:30 p. m.",
-    place: "[Nombre del salón]",
-    address: "[Dirección de la recepción]",
+    place: "The Barn at Eagle Mountain",
+    address: "1713 E Erickson Knl Ln, Eagle Mountain, UT 84005",
     note: "Celebremos juntos con cena, música y baile.",
-    mapUrl: "#",
+    mapUrl:
+      "https://www.google.com/maps/search/?api=1&query=1713%20E%20Erickson%20Knl%20Ln%2C%20Eagle%20Mountain%2C%20UT%2084005",
   },
 
   timeline: {
@@ -60,6 +62,7 @@ export const weddingContent = {
       { time: "4:30 p. m.", label: "Cambio de anillos" },
       { time: "5:30 p. m.", label: "Cena" },
       { time: "6:40 p. m.", label: "Baile" },
+      { time: "7:40 p. m.", label: "Batucada y víbora de la mar" },
       { time: "8:00 p. m.", label: "Despedida de los novios" },
     ],
   },
@@ -69,8 +72,14 @@ export const weddingContent = {
     title: "Ubicación",
     body: "Aquí encontrarás los enlaces para llegar fácilmente a cada evento.",
     links: [
-      { label: "Mapa de la ceremonia", url: "#" },
-      { label: "Mapa de la recepción", url: "#" },
+      {
+        label: "Mapa de la ceremonia",
+        url: "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
+      },
+      {
+        label: "Mapa de la recepción",
+        url: "https://www.google.com/maps/search/?api=1&query=1713%20E%20Erickson%20Knl%20Ln%2C%20Eagle%20Mountain%2C%20UT%2084005",
+      },
     ],
   },
 
@@ -98,15 +107,27 @@ export const weddingContent = {
       },
       {
         q: "¿Los niños están invitados?",
-        a: "[Placeholder] Te compartiremos los detalles pronto.",
+        a: "¡Sí! Los niños son bienvenidos y nos dará mucho gusto celebrar también con los más pequeños de la familia.",
       },
       {
         q: "¿Habrá estacionamiento?",
-        a: "[Placeholder] Sí, el lugar cuenta con estacionamiento para los invitados.",
+        a: "Sí. El lugar cuenta con estacionamiento disponible para nuestros invitados.",
       },
       {
         q: "¿Hasta cuándo puedo confirmar?",
-        a: "Agradecemos tu confirmación antes del 1 de octubre de 2026.",
+        a: "Te agradeceremos confirmar tu asistencia a más tardar el 1 de octubre de 2026.",
+      },
+      {
+        q: "¿Qué pasa si después de confirmar ya no puedo asistir?",
+        a: "No te preocupes. Solo te pedimos que nos avises lo antes posible por mensaje o llamada a cualquiera de los novios, para poder actualizar nuestra lista de invitados.",
+      },
+      {
+        q: "¿Puedo tomar fotos durante la ceremonia?",
+        a: "¡Por supuesto! Nos encantará que captures momentos especiales y, si quieres, después también nos haría mucha ilusión que compartieras tus fotos con nosotros.",
+      },
+      {
+        q: "¿Dónde está nuestra mesa de regalos?",
+        a: "Estaremos muy agradecidos por cualquier detalle que nazca de tu corazón. Tendremos una mesa de regalos durante la recepción y, si lo prefieres, también puedes consultar nuestra mesa de regalos en línea directamente desde esta página.",
       },
     ],
   },
@@ -116,17 +137,16 @@ export const weddingContent = {
     title: "Nuestros regalos",
     body: "Tu presencia es nuestro mejor regalo. Si deseas obsequiarnos algo, aquí te dejamos algunas opciones.",
     options: [
-      { label: "[Tienda de regalos 1]", url: "#" },
-      { label: "[Tienda de regalos 2]", url: "#" },
-      { label: "Lluvia de sobres", url: "#" },
+      { label: "Mesa de regalos Amazon", url: "https://www.amazon.com/wedding/guest-view/L6M37HAVA21S" },
+      { label: "Mesa de regalos Walmart", url: "https://www.walmart.com/registry/WR/5c3f1024-fe75-4095-8a5f-d43c77398ba2" },
     ],
   },
 
   thankYou: {
     heading: "Gracias",
     body: "Gracias por acompañarnos en este momento tan especial. Con todo nuestro cariño,",
-    signature: "Josh & Mitzi",
+    signature: "Mitzi & Josh",
   },
 
-  footer: "Josh & Mitzi · 7 de noviembre de 2026",
+  footer: "Mitzi & Josh · 7 de noviembre de 2026",
 } as const;

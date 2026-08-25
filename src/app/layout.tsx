@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Raleway, Bodoni_Moda, Allura } from "next/font/google";
+import { BackgroundMusicProvider } from "@/components/audio/BackgroundMusicProvider";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -28,8 +29,8 @@ const allura = Allura({
 });
 
 export const metadata: Metadata = {
-  title: "J & M — Nuestra boda",
-  description: "Invitación de boda de J & M — 7 de noviembre de 2026.",
+  title: "M & J — Nuestra boda",
+  description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cormorant.variable} ${raleway.variable} ${bodoniModa.variable} ${allura.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-coffee">
-        {children}
+        <BackgroundMusicProvider>{children}</BackgroundMusicProvider>
       </body>
     </html>
   );

@@ -17,17 +17,17 @@ interface Glyph {
   amp?: boolean;
 }
 
-// The couple's monogram (chosen Version A): J and M in Bodoni Moda as the
+// The couple's monogram (chosen Version A): M and J in Bodoni Moda as the
 // main initials, a softer Allura ampersand between them.
 const GLYPHS: Glyph[] = [
-  { char: "J", font: "var(--font-bodoni)", weight: 600 },
-  { char: "&", font: "var(--font-allura)", weight: 400, amp: true },
   { char: "M", font: "var(--font-bodoni)", weight: 600 },
+  { char: "&", font: "var(--font-allura)", weight: 400, amp: true },
+  { char: "J", font: "var(--font-bodoni)", weight: 600 },
 ];
 
 /**
- * The hero monogram lockup: J & M with mixed faces, revealed as a staggered
- * per-glyph wave (matching the rest of the hero text). J and M share a
+ * The hero monogram lockup: M & J with mixed faces, revealed as a staggered
+ * per-glyph wave (matching the rest of the hero text). M and J share a
  * baseline; the smaller script ampersand is nudged up (via relative `top`,
  * kept off `transform` so it doesn't fight the wave animation) to sit
  * optically centered between the initials.
