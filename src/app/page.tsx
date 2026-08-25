@@ -6,6 +6,7 @@ import { GardenHero } from "@/components/hero/GardenHero";
 import { EnvelopeIntro } from "@/components/envelope/EnvelopeIntro";
 import { useEnvelopeState } from "@/components/envelope/useEnvelopeState";
 import { FairyCursor } from "@/components/FairyCursor";
+import { WeddingSections } from "@/components/sections/WeddingSections";
 
 const SESSION_KEY = "envelope-intro-seen";
 const REPLAY_PARAM = "replay-intro";
@@ -54,23 +55,30 @@ export default function Home() {
   }, [stage]);
 
   return (
-    <main className="relative h-[100svh] w-full overflow-hidden">
-      <GardenHero
-        revealed={stage !== "idle"}
-        reducedMotion={reducedMotion}
-        debugReveal={debugReveal}
-        calibrate={calibrate}
-      />
-      {stage !== "done" && (
-        <EnvelopeIntro
-          stage={stage}
-          reducedMotion={reducedMotion}
-          onOpen={() => dispatch({ type: "OPEN" })}
-          onComplete={() => dispatch({ type: "COMPLETE" })}
-          onSkip={() => dispatch({ type: "SKIP" })}
-        />
-      )}
+    <>
+      <main className="relative w-full">
+        {/* Full-viewport hero: the envelope opens to reveal the garden. */}
+        <section className="relative h-[100svh] w-full overflow-hidden">
+          <GardenHero
+            revealed={stage !== "idle"}
+            reducedMotion={reducedMotion}
+            debugReveal={debugReveal}
+            calibrate={calibrate}
+          />
+          {stage !== "done" && (
+            <EnvelopeIntro
+              stage={stage}
+              reducedMotion={reducedMotion}
+              onOpen={() => dispatch({ type: "OPEN" })}
+              onComplete={() => dispatch({ type: "COMPLETE" })}
+              onSkip={() => dispatch({ type: "SKIP" })}
+            />
+          )}
+        </section>
+
+        <WeddingSections />
+      </main>
       <FairyCursor />
-    </main>
+    </>
   );
 }
