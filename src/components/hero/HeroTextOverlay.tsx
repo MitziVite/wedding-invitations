@@ -8,7 +8,6 @@ import { MonogramLockup } from "./MonogramLockup";
 
 interface HeroTextOverlayProps {
   subtitle: string;
-  date: string;
   visible: boolean;
   reducedMotion: boolean;
   className?: string;
@@ -20,20 +19,15 @@ const INITIALS_DELAY = 0;
 const DIVIDER1_DELAY = 0.4;
 const SUBTITLE_DELAY = 0.55;
 const DIVIDER2_DELAY = 1.05;
-const DATE_DELAY = 1.2;
 
 /**
- * Centered couple-names / subtitle / date composition for the garden hero,
- * revealed as a staggered per-character wave once `visible` is set (intended
- * to fire as the garden finishes resolving — see GardenHero).
+ * Centered couple-names / subtitle composition for the garden hero, revealed
+ * as a staggered per-character wave once `visible` is set (intended to fire
+ * as the garden finishes resolving — see GardenHero). The date is left to
+ * the welcome card just below, which already gives it a proper framed
+ * treatment — repeating it here read as redundant right under the monogram.
  */
-export function HeroTextOverlay({
-  subtitle,
-  date,
-  visible,
-  reducedMotion,
-  className = "",
-}: HeroTextOverlayProps) {
+export function HeroTextOverlay({ subtitle, visible, reducedMotion, className = "" }: HeroTextOverlayProps) {
   const dividerTransition = (delay: number) => ({
     delay: reducedMotion ? 0 : delay,
     duration: reducedMotion ? 0.3 : 0.6,
@@ -96,16 +90,6 @@ export function HeroTextOverlay({
         >
           <BottomDivider />
         </motion.div>
-
-        <WaveText
-          text={date}
-          visible={visible}
-          reducedMotion={reducedMotion}
-          startDelay={DATE_DELAY}
-          step={0.035}
-          className="font-display mt-5 font-medium"
-          style={{ fontSize: "clamp(1.1rem, 1.8vw, 2rem)", letterSpacing: "0.06em", lineHeight: 1.2 }}
-        />
       </div>
     </div>
   );

@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.local.example
+
+# clasp (Google Apps Script CLI) — local project pointer, machine/account-specific
+.clasp.json
 
 # vercel
 .vercel

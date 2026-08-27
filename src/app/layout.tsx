@@ -31,6 +31,8 @@ const allura = Allura({
 export const metadata: Metadata = {
   title: "M & J — Nuestra boda",
   description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
+  // Private, invite-only site — never meant to be searchable or indexed.
+  robots: { index: false, follow: false, nocache: true },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

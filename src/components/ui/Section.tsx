@@ -10,6 +10,8 @@ interface SectionProps {
   tone?: Tone;
   children: ReactNode;
   className?: string;
+  /** Override the default max-w-2xl content column — e.g. the timeline wants more room to wind. */
+  maxWidth?: string;
 }
 
 const TONE_CLASS: Record<Tone, string> = {
@@ -24,13 +26,13 @@ const TONE_CLASS: Record<Tone, string> = {
  * it scrolls into view (once). Tone sets the palette so sections can
  * alternate. Reveal is disabled for reduced motion.
  */
-export function Section({ id, tone = "ivory", children, className = "" }: SectionProps) {
+export function Section({ id, tone = "ivory", children, className = "", maxWidth = "max-w-2xl" }: SectionProps) {
   const reducedMotion = useReducedMotion();
 
   return (
     <section id={id} className={`w-full px-6 py-20 sm:py-24 ${TONE_CLASS[tone]}`}>
       <motion.div
-        className={`mx-auto w-full max-w-2xl ${className}`}
+        className={`mx-auto w-full ${maxWidth} ${className}`}
         initial={reducedMotion ? false : { opacity: 0, y: 26 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}

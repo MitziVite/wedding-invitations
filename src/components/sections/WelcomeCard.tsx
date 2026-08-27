@@ -30,7 +30,7 @@ const pad = (n: number) => n.toString().padStart(2, "0");
  * customize (drop in the real photo, change the target date, etc.).
  */
 export function WelcomeCard() {
-  const { coupleNames, weekday, welcome } = weddingContent;
+  const { coupleNames, names, weekday, welcome } = weddingContent;
   const targetMs = new Date(welcome.countdownTargetISO).getTime();
 
   // Seeded from a lazy initializer (real value on the client) and ticked by an
@@ -76,18 +76,47 @@ export function WelcomeCard() {
         {/* Soft dark scrim at the top so the ivory names read over the sky. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/35 to-transparent" />
 
-        {/* Couple names in script over the image. */}
-        <div className="absolute inset-x-0 top-0 flex justify-center px-6 pt-8 sm:pt-10">
+        {/* Couple names as a two-line script lockup — top name, then
+            "& bottom name" together on the second line. Fewer lines than a
+            full three-way stack keeps it from feeling tall/cramped, and
+            pairing the ampersand with the second name (rather than giving
+            it its own line) gives that row enough width to match the first
+            — the earlier three-line version read as narrow and empty at the
+            sides. aria-hidden on the visual lines + aria-label on the
+            wrapper keeps it announced as one clean "Mitzi & Josh" for
+            screen readers instead of fragments. */}
+        <div
+          className="absolute inset-x-0 top-0 flex flex-col items-center px-6 pt-8 sm:pt-11"
+          aria-label={coupleNames}
+        >
           <p
+            aria-hidden="true"
             className="text-center text-ivory"
             style={{
               fontFamily: "var(--font-allura)",
-              fontSize: "clamp(2.6rem, 9vw, 4.5rem)",
-              lineHeight: 1.1,
-              textShadow: "0 2px 14px rgba(30,20,14,0.55)",
+              fontSize: "clamp(3rem, 11vw, 5.5rem)",
+              lineHeight: 1,
+              textShadow: "0 2px 16px rgba(30,20,14,0.55)",
+              transform: "translateX(-0.4em)",
             }}
           >
-            {coupleNames}
+            {names.top}
+          </p>
+          <p
+            aria-hidden="true"
+            className="mt-1 flex items-baseline justify-center text-ivory"
+            style={{
+              fontFamily: "var(--font-allura)",
+              fontSize: "clamp(3rem, 11vw, 5.5rem)",
+              lineHeight: 1,
+              textShadow: "0 2px 16px rgba(30,20,14,0.55)",
+              transform: "translateX(0.4em)",
+            }}
+          >
+            <span style={{ fontSize: "0.5em", opacity: 0.85, marginRight: "0.15em", top: "-0.04em", position: "relative" }}>
+              &amp;
+            </span>
+            <span>{names.bottom}</span>
           </p>
         </div>
 

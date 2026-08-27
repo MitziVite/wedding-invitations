@@ -200,7 +200,6 @@ export function GardenHero({
 
       <HeroTextOverlay
         subtitle="Our forever begins here"
-        date="November 7, 2026"
         visible={typographyVisible}
         reducedMotion={reducedMotion}
       />

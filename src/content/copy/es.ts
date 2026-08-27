@@ -6,6 +6,10 @@
  */
 export const weddingContent = {
   coupleNames: "Mitzi & Josh",
+  // Same two names, split for the stacked script lockup in the welcome
+  // photo (top name / ampersand / bottom name) — kept separate from
+  // coupleNames so the on-photo layout doesn't depend on string-splitting.
+  names: { top: "Mitzi", bottom: "Josh" },
   date: "7 de noviembre de 2026",
   weekday: "Sábado",
 
@@ -28,13 +32,14 @@ export const weddingContent = {
 
   ceremony: {
     eyebrow: "La ceremonia",
-    title: "Ceremonia religiosa",
+    title: "Sellamiento en el templo",
     imageSrc: "/images/novios/temple.svg",
     imageAlt: "Ilustración del templo",
     time: "10:00 a. m.",
     place: "Templo de Saratoga Springs",
     address: "987 South Ensign Drive, Saratoga Springs, UT 84045-3839",
-    note: "Te esperamos para unir nuestras vidas ante Dios.",
+    note: "“Caminaremos lado a lado en una jornada eterna.”",
+    noteAuthor: "Gordon B. Hinckley",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
   },
@@ -55,46 +60,75 @@ export const weddingContent = {
   timeline: {
     eyebrow: "El gran día",
     title: "Itinerario",
+    // `icon` picks a built-in line-drawing from timelineIcons.tsx. Add an
+    // `iconSrc` (path under /public) to any stop to swap in a custom
+    // illustration later — it takes over automatically, no code change.
     events: [
-      { time: "10:00 a. m.", label: "Sellamiento en el templo" },
-      { time: "11:30 a. m. – 12:30 p. m.", label: "Sesión de fotos (familia y padrinos)" },
-      { time: "1:30 – 2:30 p. m.", label: "Comida" },
-      { time: "4:30 p. m.", label: "Cambio de anillos" },
-      { time: "5:30 p. m.", label: "Cena" },
-      { time: "6:40 p. m.", label: "Baile" },
-      { time: "7:40 p. m.", label: "Batucada y víbora de la mar" },
-      { time: "8:00 p. m.", label: "Despedida de los novios" },
-    ],
-  },
-
-  location: {
-    eyebrow: "Cómo llegar",
-    title: "Ubicación",
-    body: "Aquí encontrarás los enlaces para llegar fácilmente a cada evento.",
-    links: [
       {
-        label: "Mapa de la ceremonia",
-        url: "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
+        time: "10:00 a. m.",
+        title: "Sellamiento en el templo",
+        description: "Nos unimos para siempre",
+        icon: "rings",
       },
       {
-        label: "Mapa de la recepción",
-        url: "https://www.google.com/maps/search/?api=1&query=1713%20E%20Erickson%20Knl%20Ln%2C%20Eagle%20Mountain%2C%20UT%2084005",
+        time: "11:30 a. m. – 12:30 p. m.",
+        title: "Sesión de fotos",
+        description: "Familia y padrinos",
+        icon: "camera",
+      },
+      { time: "1:30 – 2:30 p. m.", title: "Comida", description: "Un primer brindis juntos", icon: "plate" },
+      { time: "4:30 p. m.", title: "Cambio de anillos", description: "Un nuevo comienzo", icon: "ring" },
+      { time: "5:30 p. m.", title: "Cena", description: "A disfrutar en familia", icon: "wineGlass" },
+      {
+        time: "6:40 p. m.",
+        title: "Baile",
+        description: "El primer baile de los novios",
+        icon: "musicNote",
+      },
+      {
+        time: "7:40 p. m.",
+        title: "Batucada y víbora de la mar",
+        description: "¡A mover el esqueleto!",
+        icon: "maracas",
+      },
+      {
+        time: "8:00 p. m.",
+        title: "Despedida de los novios",
+        description: "Hasta la próxima aventura",
+        icon: "carTrail",
       },
     ],
-  },
-
-  dressCode: {
-    eyebrow: "Código de vestimenta",
-    title: "Etiqueta formal",
-    body: "Vestido largo para ellas y traje formal para ellos. Te sugerimos tonos elegantes y reservar el blanco para la novia.",
   },
 
   rsvp: {
     eyebrow: "Confirma tu asistencia",
     title: "R. S. V. P.",
     body: "Nos encantaría contar contigo. Por favor confirma tu asistencia antes del 1 de octubre de 2026.",
-    cta: "Confirmar asistencia",
-    note: "El formulario estará disponible muy pronto.",
+    deadlineISO: "2026-10-01",
+    attendingLabel: "¿Podrás acompañarnos?",
+    attendingYes: "Sí, ahí estaré",
+    attendingNo: "No podré asistir",
+    plusOneLabel: "¿Deseas traer un acompañante adicional?",
+    plusOneNamePlaceholder: "Nombre de tu acompañante",
+    childrenLabel: "¿Cuántos niños vendrán contigo?",
+    childrenIncrease: "Agregar un niño",
+    childrenDecrease: "Quitar un niño",
+    messageLabel: "¿Quieres dejarnos un mensaje?",
+    messagePlaceholder: "Opcional",
+    contactNameLabel: "Nombre completo de quien confirma",
+    contactEmailLabel: "Correo (opcional)",
+    submitCta: "Enviar confirmación",
+    submitting: "Enviando…",
+    successTitle: "¡Gracias por confirmar!",
+    successBody: "Ya registramos tu respuesta. Nos vemos pronto.",
+    errorBody: "Hubo un problema al enviar tu respuesta. Intenta de nuevo o escríbenos directamente.",
+    guestQuestionNote: "¿Tienes dudas sobre cuántas personas pueden asistir contigo? Escríbenos directamente.",
+    // Replace with the couple's real numbers before sending invitations —
+    // wa.me links, digits only, country code included, no symbols.
+    whatsapp: {
+      mitzi: { name: "Mitzi", url: "https://wa.me/00000000000" },
+      josh: { name: "Josh", url: "https://wa.me/00000000000" },
+    },
   },
 
   faq: {
@@ -108,6 +142,10 @@ export const weddingContent = {
       {
         q: "¿Los niños están invitados?",
         a: "¡Sí! Los niños son bienvenidos y nos dará mucho gusto celebrar también con los más pequeños de la familia.",
+      },
+      {
+        q: "¿Cómo debo vestir?",
+        a: "La celebración será de etiqueta formal: vestido largo para ellas y traje para ellos. Te pedimos reservar el blanco para la novia.",
       },
       {
         q: "¿Habrá estacionamiento?",
