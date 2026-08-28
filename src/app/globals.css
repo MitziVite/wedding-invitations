@@ -1,22 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf6ef;
-  --foreground: #3a2a22;
+  --background: #f6f0e6;
+  --foreground: #4b3024;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Wedding palette — see /Users/mitzivite/.claude/plans/playful-dancing-dawn.md */
-  --color-ivory: #faf6ef;
-  --color-champagne: #efe1c4;
-  --color-blush: #e8c9c2;
-  --color-gold: #be9b4d;
-  --color-wine: #6b1e2b;
-  --color-coffee: #3a2a22;
-  --color-greenery: #7c8b6c;
+  /* Official wedding palette, unified with the garden hero's warm-sunset
+     atmosphere — ivory is the primary neutral; sage/blush are warmed up
+     (not pastel); blue is a supporting accent only, never a large
+     background; champagne gold is reserved for dividers/nodes/borders. No
+     burgundy/red. */
+  --color-ivory: #f6f0e6;
+  --color-soft-white: #fbf8f2;
+  /* Warm elegant parchment — the Ceremony/temple section's background.
+     Deliberately distinct from plain ivory so that section still reads as
+     its own moment, without introducing green. */
+  --color-parchment: #e6d8be;
+
+  /* Typography ink — used for ALL type instead of gray, per the hero's deep
+     espresso-brown note. NOT used as a section background (see cocoa /
+     dark-cocoa below) so retinting body text never touches section tone. */
+  --color-espresso: #4b3024;
+
+  /* The two darkest anchors, kept close in value on purpose (a soft step,
+     not an abrupt one) so Thank You → footer reads as one continuous warm
+     close rather than two disconnected blocks. */
+  --color-cocoa: #6a4332;
+  --color-dark-cocoa: #4d2f24;
+
+  /* The Itinerary section's own pink — sampled from a reference screenshot. */
+  --color-blush: #e4cac3;
+  --color-petal-blush: #ebc5be;
+  /* Warm ivory specifically for RSVP form input surfaces — close to
+     soft-white but tuned slightly warmer to sit on the celadon bg below. */
+  --color-warm-ivory: #f8f2e8;
+  /* Subtle neutral border color for RSVP form inputs. */
+  --color-taupe: #8e7e72;
+
+  /* Kept for decorative use (e.g. the Welcome photo panel) — no longer used
+     as a Section background tone; see --color-parchment for that role. */
+  --color-sage: #8f9982;
+  --color-soft-sage: #adb4a1;
+  /* A soft muted celadon / pale eucalyptus — the RSVP section's own
+     background. Distinct from --color-sage above (RSVP wanted a cooler,
+     paler green than Ceremony's warm olive would have given). */
+  --color-celadon: #c9d0be;
+
+  /* Supporting reference to the groomsmen's blue — accents/borders only,
+     never a large section fill. */
+  --color-dusty-blue: #7e91a8;
+
+  --color-gold: #c7a56a;
 
   --font-display: var(--font-cormorant);
   --font-body: var(--font-raleway);

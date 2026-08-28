@@ -41,7 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${cormorant.variable} ${raleway.variable} ${bodoniModa.variable} ${allura.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-ivory text-coffee">
+      <body className="min-h-full flex flex-col bg-ivory text-espresso">
         <BackgroundMusicProvider>{children}</BackgroundMusicProvider>
       </body>
     </html>

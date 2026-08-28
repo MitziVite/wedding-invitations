@@ -28,7 +28,7 @@ export function EnvelopeIntroDesktop({ stage, reducedMotion, onOpen }: EnvelopeI
         <EnvelopePanelHorizontal edge="bottom" isOpen={isOpen} reducedMotion={reducedMotion} />
 
         <div
-          className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-coffee/40 transition-opacity duration-500"
+          className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-espresso/40 transition-opacity duration-500"
           style={{ opacity: isOpen ? 0 : 1 }}
         />
 

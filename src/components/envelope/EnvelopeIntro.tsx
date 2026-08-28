@@ -51,7 +51,7 @@ export function EnvelopeIntro({
       <button
         type="button"
         onClick={onSkip}
-        className="absolute right-5 bottom-5 rounded px-3 py-2 font-body text-xs tracking-wide text-champagne/80 transition-colors hover:text-champagne hover:underline focus-visible:text-champagne focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className="absolute right-5 bottom-5 rounded px-3 py-2 font-body text-xs tracking-wide text-ivory/80 transition-colors hover:text-ivory hover:underline focus-visible:text-ivory focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       >
         Saltar introducción
       </button>

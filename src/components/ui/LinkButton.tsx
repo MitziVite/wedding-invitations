@@ -10,9 +10,9 @@ interface LinkButtonProps {
 }
 
 const VARIANT_CLASS: Record<Variant, string> = {
-  solid: "border-wine bg-wine text-ivory hover:bg-wine/90",
-  outline: "border-wine/60 text-wine hover:bg-wine/5",
-  light: "border-blush bg-blush text-coffee hover:bg-blush/90",
+  solid: "border-sage bg-sage text-espresso hover:bg-sage/90",
+  outline: "border-espresso/50 text-espresso hover:bg-espresso/5",
+  light: "border-blush bg-blush text-espresso hover:bg-blush/90",
 };
 
 /** A consistent, accessible link styled as a button (map links, registry, etc.). */

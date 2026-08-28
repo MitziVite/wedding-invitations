@@ -60,42 +60,72 @@ export const weddingContent = {
   timeline: {
     eyebrow: "El gran día",
     title: "Itinerario",
-    // `icon` picks a built-in line-drawing from timelineIcons.tsx. Add an
-    // `iconSrc` (path under /public) to any stop to swap in a custom
-    // illustration later — it takes over automatically, no code change.
+    // `image` is a path under /public/images/itinerary — drop in a
+    // differently-shaped replacement any time and it just works (see
+    // ItineraryIllustration.tsx: any aspect ratio is handled automatically).
     events: [
       {
         time: "10:00 a. m.",
         title: "Sellamiento en el templo",
-        description: "Nos unimos para siempre",
-        icon: "rings",
+        subtitle: "Nos unimos para siempre",
+        image: "/images/itinerary/templo.png",
+        alt: "Ilustración acuarela del templo entre flores",
       },
       {
-        time: "11:30 a. m. – 12:30 p. m.",
-        title: "Sesión de fotos",
-        description: "Familia y padrinos",
-        icon: "camera",
-      },
-      { time: "1:30 – 2:30 p. m.", title: "Comida", description: "Un primer brindis juntos", icon: "plate" },
-      { time: "4:30 p. m.", title: "Cambio de anillos", description: "Un nuevo comienzo", icon: "ring" },
-      { time: "5:30 p. m.", title: "Cena", description: "A disfrutar en familia", icon: "wineGlass" },
-      {
-        time: "6:40 p. m.",
-        title: "Baile",
-        description: "El primer baile de los novios",
-        icon: "musicNote",
+        time: "4:15 p. m.",
+        title: "Bienvenidos",
+        subtitle: "Estamos por comenzar",
+        image: "/images/itinerary/bienvenidos.png",
+        alt: "Ilustración acuarela de un arco floral de bienvenida",
       },
       {
-        time: "7:40 p. m.",
-        title: "Batucada y víbora de la mar",
-        description: "¡A mover el esqueleto!",
-        icon: "maracas",
+        time: "4:30 p. m.",
+        title: "Ceremonia de anillos",
+        subtitle: "Un nuevo comienzo",
+        image: "/images/itinerary/anillos.png",
+        alt: "Ilustración acuarela de dos anillos entrelazados con flores",
+      },
+      {
+        time: "5:15 p. m.",
+        title: "Cena",
+        subtitle: "A disfrutar en familia",
+        image: "/images/itinerary/comida.png",
+        alt: "Ilustración acuarela de una cena elegante",
+      },
+      {
+        time: "6:15 p. m.",
+        title: "Primer baile",
+        subtitle: "El primero de muchos",
+        image: "/images/itinerary/primer-baile.png",
+        alt: "Ilustración acuarela de los novios bailando",
+      },
+      {
+        time: "6:15 p. m.",
+        title: "Unas palabras",
+        subtitle: "Con todo nuestro cariño",
+        image: "/images/itinerary/palabras.png",
+        alt: "Ilustración acuarela de un micrófono floral",
+      },
+      {
+        time: "6:30 p. m.",
+        title: "Fotos y recuerdos",
+        subtitle: "Queremos una foto contigo",
+        image: "/images/itinerary/fotos.png",
+        alt: "Ilustración acuarela de una cámara floral",
+      },
+      {
+        time: "7:00 p. m.",
+        title: "Pastel",
+        subtitle: "Que siga la fiesta",
+        image: "/images/itinerary/pastel.png",
+        alt: "Ilustración acuarela de un pastel de bodas floral",
       },
       {
         time: "8:00 p. m.",
         title: "Despedida de los novios",
-        description: "Hasta la próxima aventura",
-        icon: "carTrail",
+        subtitle: "Hasta la próxima aventura ✨",
+        image: "/images/itinerary/despedida.png",
+        alt: "Ilustración acuarela del auto de despedida de los novios",
       },
     ],
   },

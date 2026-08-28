@@ -28,7 +28,7 @@ export function EnvelopeIntroMobile({ stage, reducedMotion, onOpen }: EnvelopeIn
         <EnvelopePanel side="right" isOpen={isOpen} reducedMotion={reducedMotion} />
 
         <div
-          className="pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-coffee/40 transition-opacity duration-500"
+          className="pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-espresso/40 transition-opacity duration-500"
           style={{ opacity: isOpen ? 0 : 1 }}
         />
 

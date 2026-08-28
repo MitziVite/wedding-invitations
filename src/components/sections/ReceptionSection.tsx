@@ -23,14 +23,14 @@ export function ReceptionSection() {
       >
         <motion.p
           variants={v(fadeIn(REVEAL_DELAYS.eyebrow))}
-          className="mb-3 font-body text-xs tracking-[0.22em] text-wine uppercase"
+          className="mb-3 font-body text-xs tracking-[0.22em] text-espresso/70 uppercase"
         >
           {reception.eyebrow}
         </motion.p>
 
         <motion.h2
           variants={v(fadeUp(REVEAL_DELAYS.heading))}
-          className="font-display text-4xl text-coffee sm:text-5xl"
+          className="font-display text-4xl text-espresso sm:text-5xl"
         >
           {reception.title}
         </motion.h2>
@@ -54,19 +54,19 @@ export function ReceptionSection() {
         </div>
 
         <motion.div variants={v(fadeUp(REVEAL_DELAYS.details))} className="mt-8">
-          <p className="font-display text-3xl text-wine">{reception.time}</p>
-          <p className="mt-3 font-body text-lg font-medium text-coffee">{reception.place}</p>
-          <p className="mt-1 font-body text-sm text-coffee/70">{reception.address}</p>
+          <p className="font-display text-3xl text-espresso">{reception.time}</p>
+          <p className="mt-3 font-body text-lg font-medium text-espresso">{reception.place}</p>
+          <p className="mt-1 font-body text-sm text-espresso/70">{reception.address}</p>
         </motion.div>
 
         <motion.div variants={v(fadeIn(REVEAL_DELAYS.ornament))} className="mt-6">
-          <Ornament tone="gold" />
+          <Ornament />
         </motion.div>
 
         {reception.note ? (
           <motion.p
             variants={v(fadeIn(REVEAL_DELAYS.note, 0.9))}
-            className="mt-4 max-w-md font-display text-xl text-coffee/80 italic"
+            className="mt-4 max-w-md font-display text-xl text-espresso/80 italic"
           >
             {reception.note}
           </motion.p>

@@ -7,8 +7,8 @@ import { MAX_CHILDREN } from "@/lib/rsvp/schema";
 type Status = "form" | "submitting" | "success";
 
 const inputClass =
-  "w-full rounded-sm border border-blush/40 bg-ivory/95 px-4 py-2.5 font-body text-coffee placeholder:text-coffee/40 focus:ring-2 focus:ring-gold focus:outline-none";
-const labelClass = "font-body text-sm text-champagne";
+  "w-full rounded-sm border border-taupe/30 bg-warm-ivory px-4 py-2.5 font-body text-espresso placeholder:text-espresso/40 focus:ring-2 focus:ring-gold focus:outline-none";
+const labelClass = "font-body text-sm text-espresso/70";
 
 export function RsvpForm() {
   const { rsvp } = weddingContent;
@@ -62,7 +62,7 @@ export function RsvpForm() {
   }
 
   const contactNote = (
-    <p className="mt-6 max-w-sm text-center font-body text-sm text-champagne/80">
+    <p className="mt-6 max-w-sm text-center font-body text-sm text-espresso/70">
       {rsvp.guestQuestionNote}
       <span className="mt-2 flex justify-center gap-4">
         {Object.values(rsvp.whatsapp).map((contact) => (
@@ -71,7 +71,7 @@ export function RsvpForm() {
             href={contact.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline decoration-gold/50 underline-offset-4 hover:text-ivory"
+            className="underline decoration-gold/50 underline-offset-4 hover:text-dusty-blue"
           >
             {contact.name}
           </a>
@@ -83,8 +83,8 @@ export function RsvpForm() {
   if (status === "success") {
     return (
       <div className="mt-8 flex flex-col items-center text-center" role="status" aria-live="polite">
-        <p className="font-display text-2xl text-ivory">{rsvp.successTitle}</p>
-        <p className="mt-2 max-w-sm font-body text-champagne/90">{rsvp.successBody}</p>
+        <p className="font-display text-2xl text-espresso">{rsvp.successTitle}</p>
+        <p className="mt-2 max-w-sm font-body text-espresso/80">{rsvp.successBody}</p>
       </div>
     );
   }
@@ -115,8 +115,8 @@ export function RsvpForm() {
                 aria-pressed={attending === value}
                 className={`flex-1 rounded-sm border px-4 py-2.5 font-body text-sm transition-colors ${
                   attending === value
-                    ? "border-gold bg-gold text-coffee"
-                    : "border-champagne/40 bg-transparent text-champagne hover:bg-ivory/10"
+                    ? "border-gold bg-gold text-espresso"
+                    : "border-dusty-blue/40 bg-transparent text-dusty-blue hover:bg-soft-white"
                 }`}
               >
                 {value === "yes" ? rsvp.attendingYes : rsvp.attendingNo}
@@ -145,11 +145,11 @@ export function RsvpForm() {
                   onClick={() => stepChildren(-1)}
                   disabled={childrenCount <= 0}
                   aria-label={rsvp.childrenDecrease}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-champagne/40 font-body text-lg text-champagne transition-colors hover:bg-ivory/10 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-dusty-blue/40 font-body text-lg text-dusty-blue transition-colors hover:bg-soft-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   −
                 </button>
-                <span className="w-6 text-center font-display text-xl text-ivory tabular-nums">
+                <span className="w-6 text-center font-display text-xl text-espresso tabular-nums">
                   {childrenCount}
                 </span>
                 <button
@@ -157,7 +157,7 @@ export function RsvpForm() {
                   onClick={() => stepChildren(1)}
                   disabled={childrenCount >= MAX_CHILDREN}
                   aria-label={rsvp.childrenIncrease}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-champagne/40 font-body text-lg text-champagne transition-colors hover:bg-ivory/10 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-dusty-blue/40 font-body text-lg text-dusty-blue transition-colors hover:bg-soft-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   +
                 </button>
@@ -198,7 +198,7 @@ export function RsvpForm() {
         </label>
 
         {submitError && (
-          <p className="font-body text-sm text-blush" role="alert">
+          <p className="font-body text-sm font-semibold text-espresso" role="alert">
             {submitError}
           </p>
         )}
@@ -206,7 +206,7 @@ export function RsvpForm() {
         <button
           type="submit"
           disabled={!attending || status === "submitting"}
-          className="rounded-sm border border-gold bg-gold px-6 py-3 font-body text-sm tracking-wide text-coffee uppercase transition-colors hover:bg-gold/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-sm border border-gold bg-gold px-6 py-3 font-body text-sm tracking-wide text-espresso uppercase transition-colors hover:bg-gold/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "submitting" ? rsvp.submitting : rsvp.submitCta}
         </button>

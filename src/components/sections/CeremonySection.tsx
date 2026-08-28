@@ -20,7 +20,7 @@ export function CeremonySection() {
   const v = (variants: Variants) => (reducedMotion ? undefined : variants);
 
   return (
-    <Section id="ceremonia" tone="champagne">
+    <Section id="ceremonia" tone="parchment">
       <motion.div
         className="flex flex-col items-center text-center"
         initial={reducedMotion ? false : "hidden"}
@@ -29,14 +29,14 @@ export function CeremonySection() {
       >
         <motion.p
           variants={v(fadeIn(REVEAL_DELAYS.eyebrow))}
-          className="mb-3 font-body text-xs tracking-[0.22em] text-wine uppercase"
+          className="mb-3 font-body text-xs tracking-[0.22em] text-espresso/70 uppercase"
         >
           {ceremony.eyebrow}
         </motion.p>
 
         <motion.h2
           variants={v(fadeUp(REVEAL_DELAYS.heading))}
-          className="font-display text-4xl text-coffee sm:text-5xl"
+          className="font-display text-4xl text-espresso sm:text-5xl"
         >
           {ceremony.title}
         </motion.h2>
@@ -60,19 +60,19 @@ export function CeremonySection() {
         </div>
 
         <motion.div variants={v(fadeUp(REVEAL_DELAYS.details))} className="mt-8">
-          <p className="font-display text-3xl text-wine">{ceremony.time}</p>
-          <p className="mt-3 font-body text-lg font-medium text-coffee">{ceremony.place}</p>
-          <p className="mt-1 font-body text-sm text-coffee/70">{ceremony.address}</p>
+          <p className="font-display text-3xl text-espresso">{ceremony.time}</p>
+          <p className="mt-3 font-body text-lg font-medium text-espresso">{ceremony.place}</p>
+          <p className="mt-1 font-body text-sm text-espresso/70">{ceremony.address}</p>
         </motion.div>
 
         <motion.div variants={v(fadeIn(REVEAL_DELAYS.ornament))} className="mt-6">
-          <Ornament tone="gold" />
+          <Ornament />
         </motion.div>
 
         <motion.div variants={v(fadeIn(REVEAL_DELAYS.note, 0.9))} className="mt-4 max-w-md">
-          <p className="font-display text-xl text-coffee/80 italic">{ceremony.note}</p>
+          <p className="font-display text-xl text-espresso/80 italic">{ceremony.note}</p>
           {ceremony.noteAuthor ? (
-            <p className="mt-1.5 font-body text-xs tracking-[0.08em] text-coffee/50 uppercase">
+            <p className="mt-1.5 font-body text-xs tracking-[0.08em] text-espresso/50 uppercase">
               — {ceremony.noteAuthor}
             </p>
           ) : null}

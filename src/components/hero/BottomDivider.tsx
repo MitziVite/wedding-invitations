@@ -10,9 +10,9 @@ export function BottomDivider({ className = "" }: BottomDividerProps) {
       style={{ width: "clamp(90px, 16vw, 130px)" }}
       aria-hidden="true"
     >
-      <span className="h-px flex-1 bg-champagne/80" />
-      <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-champagne/85" />
-      <span className="h-px flex-1 bg-champagne/80" />
+      <span className="h-px flex-1 bg-ivory/80" />
+      <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-ivory/85" />
+      <span className="h-px flex-1 bg-ivory/80" />
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function MuteToggle() {
       initial={reducedMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: reducedMotion ? 0 : 0.6, duration: reducedMotion ? 0.2 : 0.6, ease: "easeOut" }}
-      className="fixed right-5 bottom-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 bg-coffee/75 text-champagne shadow-sm backdrop-blur-sm transition-colors hover:bg-coffee/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      className="fixed right-5 bottom-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 bg-espresso/75 text-soft-white shadow-sm backdrop-blur-sm transition-colors hover:bg-espresso/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
     >
       {isMuted ? <MutedIcon /> : <UnmutedIcon />}
     </motion.button>

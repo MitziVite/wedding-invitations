@@ -55,7 +55,7 @@ export function WelcomeCard() {
       {/* Photo with the couple's names, fading into the ivory panel below.
           Full viewport width, height capped (not full-screen) — object-cover
           keeps the couple centered regardless of the resulting crop. */}
-      <div className="relative h-[52vh] w-full overflow-hidden bg-champagne sm:h-[62vh]">
+      <div className="relative h-[52vh] w-full overflow-hidden bg-sage sm:h-[62vh]">
         {welcome.photoSrc ? (
           // eslint-disable-next-line @next/next/no-img-element -- swap-in couple photo, art-directed by the author
           <img
@@ -65,7 +65,7 @@ export function WelcomeCard() {
             style={{ objectPosition: "50% 78%" }}
           />
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-champagne to-blush text-coffee/45">
+          <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-sage to-petal-blush text-espresso/45">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 21s-7.5-4.9-10-9.3C.6 8.9 2 6 4.9 6c1.9 0 3.2 1.1 4 2.2C9.7 7.1 11 6 12.9 6 15.8 6 17.2 8.9 15.9 11.7 13.5 16.1 12 21 12 21z" />
             </svg>
@@ -139,35 +139,35 @@ export function WelcomeCard() {
           style={{ gridTemplateColumns: "1fr auto 1fr" }}
         >
           <span className="h-px bg-gold/40" aria-hidden="true" />
-          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
+          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-espresso/70 uppercase">
             {welcome.monthName}
           </span>
           <span className="h-px bg-gold/40" aria-hidden="true" />
 
           <span aria-hidden="true" />
-          <p className="lining-nums justify-self-center font-display text-7xl leading-none text-coffee">
+          <p className="lining-nums justify-self-center font-display text-7xl leading-none text-espresso">
             {welcome.day}
           </p>
           <span aria-hidden="true" />
 
           <span className="h-px bg-gold/40" aria-hidden="true" />
-          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-coffee/70 uppercase">
+          <span className="justify-self-center font-body text-xs tracking-[0.3em] text-espresso/70 uppercase">
             {weekday} · {welcome.year}
           </span>
           <span className="h-px bg-gold/40" aria-hidden="true" />
         </div>
 
-        <p className="mt-10 mb-5 font-body text-xs tracking-[0.3em] text-wine uppercase">Faltan</p>
+        <p className="mt-10 mb-5 font-body text-xs tracking-[0.3em] text-espresso/70 uppercase">Faltan</p>
         <div className="grid grid-cols-4 gap-2">
           {units.map((u) => (
             <div key={u.label} className="flex flex-col items-center">
               <span
                 suppressHydrationWarning
-                className="font-display text-4xl text-coffee tabular-nums sm:text-5xl"
+                className="font-display text-4xl text-espresso tabular-nums sm:text-5xl"
               >
                 {u.value}
               </span>
-              <span className="mt-1 font-body text-[10px] tracking-[0.18em] text-coffee/60 uppercase">
+              <span className="mt-1 font-body text-[10px] tracking-[0.18em] text-espresso/60 uppercase">
                 {u.label}
               </span>
             </div>

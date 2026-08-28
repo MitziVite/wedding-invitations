@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-type Tone = "ivory" | "champagne" | "blush" | "wine";
+type Tone = "ivory" | "parchment" | "blush" | "celadon" | "cocoa";
 
 interface SectionProps {
   id?: string;
@@ -15,10 +15,11 @@ interface SectionProps {
 }
 
 const TONE_CLASS: Record<Tone, string> = {
-  ivory: "bg-ivory text-coffee",
-  champagne: "bg-champagne text-coffee",
-  blush: "bg-blush text-coffee",
-  wine: "bg-wine text-ivory",
+  ivory: "bg-ivory text-espresso",
+  parchment: "bg-parchment text-espresso",
+  blush: "bg-blush text-espresso",
+  celadon: "bg-celadon text-espresso",
+  cocoa: "bg-cocoa text-ivory",
 };
 
 /**
