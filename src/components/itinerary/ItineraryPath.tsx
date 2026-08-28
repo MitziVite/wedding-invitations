@@ -107,6 +107,19 @@ export function ItineraryPath({ stops, vine, width, height, reducedMotion }: Iti
                 vectorEffect="non-scaling-stroke"
               />
             ))}
+            {/* Drawn AFTER (on top of) the leaves above — a visible midrib crossing through each leaf's middle, not just the stem touching its edge. */}
+            {leaf.veins.map((d, j) => (
+              <path
+                key={j}
+                d={d}
+                className="stroke-gold"
+                fill="none"
+                strokeOpacity={0.75}
+                strokeWidth={1}
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
           </g>
         ))}
       </motion.g>

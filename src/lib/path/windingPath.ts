@@ -19,6 +19,26 @@ function mulberry32(seed: number) {
 
 const VINE_SEED = 20260828;
 
+const CATMULL_ROM_TENSION = 5.7;
+
+/** The cubic Bézier control points for the Catmull-Rom segment between `points[i]` and `points[i + 1]`. */
+function catmullRomSegment(points: Point[], i: number): [Point, Point, Point, Point] {
+  const p0 = points[i - 1] ?? points[i];
+  const p1 = points[i];
+  const p2 = points[i + 1];
+  const p3 = points[i + 2] ?? p2;
+
+  const c1: Point = {
+    x: p1.x + (p2.x - p0.x) / CATMULL_ROM_TENSION,
+    y: p1.y + (p2.y - p0.y) / CATMULL_ROM_TENSION,
+  };
+  const c2: Point = {
+    x: p2.x - (p3.x - p1.x) / CATMULL_ROM_TENSION,
+    y: p2.y - (p3.y - p1.y) / CATMULL_ROM_TENSION,
+  };
+  return [p1, c1, c2, p2];
+}
+
 /** Smooth Catmull-Rom spline converted to cubic Béziers. */
 function smoothThroughPoints(points: Point[]): string {
   if (points.length === 0) return "";
@@ -26,18 +46,8 @@ function smoothThroughPoints(points: Point[]): string {
 
   let d = `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
   for (let i = 0; i < points.length - 1; i++) {
-    const p0 = points[i - 1] ?? points[i];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = points[i + 2] ?? p2;
-
-    const tension = 5.7;
-    const c1x = p1.x + (p2.x - p0.x) / tension;
-    const c1y = p1.y + (p2.y - p0.y) / tension;
-    const c2x = p2.x - (p3.x - p1.x) / tension;
-    const c2y = p2.y - (p3.y - p1.y) / tension;
-
-    d += ` C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+    const [, c1, c2, p2] = catmullRomSegment(points, i);
+    d += ` C ${c1.x.toFixed(1)},${c1.y.toFixed(1)} ${c2.x.toFixed(1)},${c2.y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
   }
   return d;
 }
@@ -60,29 +70,46 @@ function botanicalBranchPath(from: Point, to: Point, bow: number): string {
   return `M ${from.x.toFixed(1)},${from.y.toFixed(1)} C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${to.x.toFixed(1)},${to.y.toFixed(1)}`;
 }
 
-/** Elegant botanical curl / tendril. No node is attached to it — only real itinerary events get dots. */
+/**
+ * Elegant botanical curl / tendril — a genuine mathematical spiral (like a
+ * pea-tendril's coil) rather than a hand-tuned symmetric loop: it starts
+ * exactly at `anchor` and winds inward, its radius shrinking as its angle
+ * sweeps around, so it reads as an open, organic curl rather than a
+ * closed, geometric shape. No node is attached to it — only real
+ * itinerary events get dots.
+ */
 function curlPath(anchor: Point, size: number, dir: 1 | -1): string {
-  const x = anchor.x;
-  const y = anchor.y;
-  const w = size * dir;
+  // The spiral's center, offset from the anchor — the vector from center
+  // to anchor gives the spiral's starting radius and angle, guaranteeing
+  // the curve's first point is exactly `anchor`.
+  const center: Point = { x: anchor.x + dir * size * 0.42, y: anchor.y - size * 0.32 };
+  const startRadius = Math.hypot(anchor.x - center.x, anchor.y - center.y);
+  const startAngle = Math.atan2(anchor.y - center.y, anchor.x - center.x);
+  const endRadius = size * 0.05;
+  const turns = 1.35;
+  const steps = 18;
 
-  return [
-    `M ${x.toFixed(1)},${y.toFixed(1)}`,
-    `C ${(x + w * 0.25).toFixed(1)},${(y - size * 0.15).toFixed(1)}`,
-    `${(x + w * 0.9).toFixed(1)},${(y - size * 0.65).toFixed(1)}`,
-    `${(x + w * 0.55).toFixed(1)},${(y - size).toFixed(1)}`,
-    `C ${(x + w * 0.15).toFixed(1)},${(y - size * 1.25).toFixed(1)}`,
-    `${(x - w * 0.45).toFixed(1)},${(y - size * 0.95).toFixed(1)}`,
-    `${(x - w * 0.15).toFixed(1)},${(y - size * 0.55).toFixed(1)}`,
-    `C ${(x + w * 0.05).toFixed(1)},${(y - size * 0.35).toFixed(1)}`,
-    `${(x + w * 0.35).toFixed(1)},${(y - size * 0.45).toFixed(1)}`,
-    `${(x + w * 0.25).toFixed(1)},${(y - size * 0.68).toFixed(1)}`,
-  ].join(" ");
+  // Sweeping the angle by `-dir` (not `+dir`) moves the very start of the
+  // spiral AWAY from the trunk first — with the `+dir` sign, the anchor's
+  // starting angle already points back toward the trunk, so the first
+  // stretch of the sweep (while the radius is still largest) swung the
+  // tendril's tail further across the trunk before curling inward.
+  const points: Point[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const angle = startAngle - dir * t * turns * 2 * Math.PI;
+    const radius = startRadius - (startRadius - endRadius) * t;
+    points.push({ x: center.x + Math.cos(angle) * radius, y: center.y + Math.sin(angle) * radius });
+  }
+
+  return smoothThroughPoints(points);
 }
 
 export interface LeafSprig {
   stemD: string;
   leaves: string[];
+  /** One short line per leaf, drawn AFTER (on top of) the filled leaf shapes — a visible midrib crossing through each leaf's middle, like a real leaf's central vein, instead of the stem just touching the leaf's edge. */
+  veins: string[];
 }
 
 /**
@@ -136,39 +163,69 @@ function cubicPoint(p0: Point, p1: Point, p2: Point, p3: Point, t: number): Poin
 
 /**
  * Small botanical sprig: a short secondary branch that visibly grows out
- * of the main vine at `anchor`, with three small oval leaves — each on
- * its OWN short pedicel stem branching off at a different point along
- * that secondary branch, alternating sides — rather than leaves attached
- * with no stem of their own at one single spot (which read as one fused
- * cluster instead of a sprig).
+ * of the main vine at `anchor`, with `leafCount` small oval leaves — each
+ * on its OWN short pedicel stem branching off at a different point along
+ * that secondary branch, alternating sides, EXCEPT the largest leaf,
+ * which grows directly out of the branch's real endpoint rather than
+ * another lateral pedicel — no separate pedicel, no gap, so the branch
+ * reads as culminating in a leaf instead of leaving a bit of bare stem
+ * dangling past the last one.
  */
-function leafSprig(anchor: Point, size: number, dir: 1 | -1): LeafSprig {
+function leafSprig(anchor: Point, size: number, dir: 1 | -1, leafCount: 2 | 3 = 3): LeafSprig {
   const x = anchor.x;
   const y = anchor.y;
 
-  // The secondary branch: curves outward and upward from the vine.
-  const branchLength = size * 2.4;
+  // Stems (the secondary branch and each pedicel) are kept short — the
+  // leaves themselves are the point of emphasis, not the twigs carrying
+  // them.
+  const branchLength = size * 1.5;
   const p0 = anchor;
-  const p1: Point = { x: x + size * 0.35 * dir, y: y - branchLength * 0.35 };
-  const p2: Point = { x: x + size * 0.85 * dir, y: y - branchLength * 0.75 };
-  const p3: Point = { x: x + size * 1.05 * dir, y: y - branchLength };
+  const p1: Point = { x: x + size * 0.22 * dir, y: y - branchLength * 0.35 };
+  const p2: Point = { x: x + size * 0.55 * dir, y: y - branchLength * 0.75 };
+  const p3: Point = { x: x + size * 0.68 * dir, y: y - branchLength };
   let stemD = `M ${p0.x.toFixed(1)},${p0.y.toFixed(1)} C ${p1.x.toFixed(1)},${p1.y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)} ${p3.x.toFixed(1)},${p3.y.toFixed(1)}`;
 
   const leaves: string[] = [];
-  const pedicelPositions = [0.32, 0.62, 0.9];
-  pedicelPositions.forEach((t, i) => {
+  const veins: string[] = [];
+
+  function addVeinedLeaf(base: Point, angleDeg: number, length: number, width: number) {
+    leaves.push(leafShape(base, angleDeg, length, width));
+    const rad = (angleDeg * Math.PI) / 180;
+    const veinLength = length * 0.62;
+    const veinEnd: Point = { x: base.x + Math.cos(rad) * veinLength, y: base.y + Math.sin(rad) * veinLength };
+    veins.push(`M ${base.x.toFixed(1)},${base.y.toFixed(1)} L ${veinEnd.x.toFixed(1)},${veinEnd.y.toFixed(1)}`);
+  }
+
+  // Every leaf but the last is a lateral one, splaying out to the side via
+  // its own short pedicel partway along the branch.
+  const lateralPositions = leafCount === 3 ? [0.3, 0.62] : [0.42];
+  const lateralShapes =
+    leafCount === 3
+      ? [
+          { length: size * 0.5, width: size * 0.36 }, // lower leaf — medium
+          { length: size * 0.28, width: size * 0.26 }, // middle — small, roundish bud
+        ]
+      : [{ length: size * 0.4, width: size * 0.3 }]; // the sprig's one small side leaf
+  lateralPositions.forEach((t, i) => {
     const base = cubicPoint(p0, p1, p2, p3, t);
     const side = i % 2 === 0 ? 1 : -1;
-    const angle = -90 + side * 50 * dir;
-    const pedicelLength = size * 0.3;
+    const angle = -90 + side * 68 * dir;
+    const pedicelLength = size * 0.16;
     const rad = (angle * Math.PI) / 180;
     const tip: Point = { x: base.x + Math.cos(rad) * pedicelLength, y: base.y + Math.sin(rad) * pedicelLength };
 
     stemD += ` M ${base.x.toFixed(1)},${base.y.toFixed(1)} L ${tip.x.toFixed(1)},${tip.y.toFixed(1)}`;
-    leaves.push(leafShape(tip, angle, size * 0.34, size * 0.22));
+    addVeinedLeaf(tip, angle, lateralShapes[i].length, lateralShapes[i].width);
   });
 
-  return { stemD, leaves };
+  // The largest leaf grows directly out of the branch's real endpoint
+  // (p3), continuing in the exact direction the branch was already
+  // heading (the tangent at the end of a cubic Bézier is the direction
+  // from its last control point to its endpoint).
+  const endAngle = (Math.atan2(p3.y - p2.y, p3.x - p2.x) * 180) / Math.PI;
+  addVeinedLeaf(p3, endAngle, size * 0.7, size * 0.44);
+
+  return { stemD, leaves, veins };
 }
 
 export interface VineGeometry {
@@ -270,8 +327,8 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
   // Decorations anchor on the trunk's real intermediate waypoints — one
   // small botanical detail between rows, never exactly where a branch
   // meets the trunk.
-  const leafSize = clamp(containerWidth * 0.026, 9, 16);
-  const curlSize = clamp(containerWidth * 0.024, 8, 15);
+  const leafSize = clamp(containerWidth * 0.048, 18, 30);
+  const curlSize = clamp(containerWidth * 0.036, 13, 22);
   const leaves: LeafSprig[] = [];
   const curls: string[] = [];
 
@@ -284,8 +341,60 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
     }
   });
 
-  // One ornamental sprig at the very top of the trunk.
-  leaves.unshift(leafSprig({ x: trunkStart.x, y: Math.max(20, firstY - 35) }, leafSize * 1.15, 1));
+  // One ornamental sprig at the very top of the trunk — sampled from the
+  // real first curve segment (not an approximated x,y) so it's actually
+  // anchored on the visible trunk rather than floating just beside it.
+  const topAnchor =
+    trunkPoints.length > 1 ? cubicPoint(...catmullRomSegment(trunkPoints, 0), 0.45) : trunkStart;
+  leaves.unshift(leafSprig(topAnchor, leafSize * 1.15, 1));
+
+  // A few extra, smaller two-leaf sprigs at well-spread points further
+  // down the trunk — each anchored on a real point along its segment (the
+  // same guaranteed-on-curve technique as the top sprig above), not an
+  // approximated point, and never on the very first segment (that one
+  // already has the top sprig). Sampled past each segment's midpoint
+  // (0.65, not 0.5) so the sprig sits comfortably below the row anchor at
+  // the segment's start — right at that anchor is where a branch to an
+  // event node begins, and a sprig too close to it collided with the
+  // branch line.
+  const totalSegments = trunkPoints.length - 1;
+  const extraSprigCount = 3;
+  const usedSegments = new Set<number>([0]);
+  for (let k = 1; k <= extraSprigCount; k++) {
+    const segIndex = clamp(Math.round((totalSegments * k) / (extraSprigCount + 1)), 1, totalSegments - 1);
+    usedSegments.add(segIndex);
+    const extraAnchor = cubicPoint(...catmullRomSegment(trunkPoints, segIndex), 0.65);
+    const direction: 1 | -1 = k % 2 === 0 ? -1 : 1;
+    leaves.push(leafSprig(extraAnchor, leafSize * 0.72, direction, 2));
+  }
+
+  // A few extra decorative curls, each a different size, at more points
+  // along the trunk — spread across the segments the sprigs above didn't
+  // already claim (plus a one-segment buffer around each, so a curl never
+  // lands right next to a sprig).
+  const reservedSegments = new Set<number>();
+  usedSegments.forEach((s) => [s - 1, s, s + 1].forEach((n) => reservedSegments.add(n)));
+
+  const extraCurlSizeMultipliers = [0.65, 1.2, 0.85, 1.35];
+  const availableSegments: number[] = [];
+  for (let segIndex = 1; segIndex < totalSegments; segIndex++) {
+    if (!reservedSegments.has(segIndex)) availableSegments.push(segIndex);
+  }
+  // If the buffer left too few candidates (a very short itinerary), fall
+  // back to just avoiding exact overlap.
+  const curlCandidates =
+    availableSegments.length >= extraCurlSizeMultipliers.length
+      ? availableSegments
+      : Array.from({ length: totalSegments - 1 }, (_, i) => i + 1).filter((s) => !usedSegments.has(s));
+
+  extraCurlSizeMultipliers.forEach((multiplier, idx) => {
+    const segIndex = curlCandidates[idx % curlCandidates.length];
+    if (segIndex === undefined) return;
+    const t = idx % 2 === 0 ? 0.4 : 0.6;
+    const anchor = cubicPoint(...catmullRomSegment(trunkPoints, segIndex), t);
+    const direction: 1 | -1 = idx % 2 === 0 ? 1 : -1;
+    curls.push(curlPath(anchor, curlSize * multiplier, direction));
+  });
 
   return { mainD, branches, curls, leaves };
 }
