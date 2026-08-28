@@ -260,8 +260,13 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
 
   const rng = mulberry32(VINE_SEED);
   const centerX = containerWidth / 2;
-  // Very subtle movement — a botanical stem, not a sine-wave timeline.
-  const sway = clamp(containerWidth * 0.022, 7, 16);
+  // A clearly visible botanical sway — not a rigid, barely-moving spine.
+  // The floor is intentionally low (not a fixed 20px+) so narrow phones
+  // (320–430px) get the smaller value the formula naturally produces
+  // there, rather than being pinned up to a floor tuned for wider
+  // screens — on a narrow column, that extra sway could bring the trunk
+  // uncomfortably close to the event text/illustrations.
+  const sway = clamp(containerWidth * 0.055, 14, 42);
 
   const rows: Point[][] = [];
   for (let i = 0; i < points.length; i += 2) rows.push(points.slice(i, i + 2));
@@ -274,9 +279,21 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
   const rowAnchors: Point[] = [];
   const intermediates: Point[] = [];
 
+  // Mostly alternates side to side, but not on a perfectly strict
+  // every-other-row schedule — occasionally continuing the same direction
+  // for one extra row reads as a hand-grown vine rather than a
+  // mechanically symmetric wave.
+  let prevDirection: 1 | -1 = 1;
   rowYs.forEach((rowY, index) => {
-    const direction = index % 2 === 0 ? 1 : -1;
-    const variance = 0.55 + rng() * 0.35;
+    let direction: 1 | -1;
+    if (index === 0) {
+      direction = 1;
+    } else {
+      const keepDirection = rng() < 0.2;
+      direction = keepDirection ? prevDirection : prevDirection === 1 ? -1 : 1;
+    }
+    prevDirection = direction;
+    const variance = 0.5 + rng() * 0.7;
     const anchor: Point = { x: centerX + direction * sway * variance, y: rowY };
     trunkPoints.push(anchor);
     rowAnchors.push(anchor);
@@ -284,7 +301,7 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
     const nextY = rowYs[index + 1];
     if (nextY !== undefined) {
       const mid: Point = {
-        x: centerX - direction * sway * (0.35 + rng() * 0.25),
+        x: centerX - direction * sway * (0.3 + rng() * 0.55),
         y: rowY + (nextY - rowY) * (0.46 + rng() * 0.08),
       };
       trunkPoints.push(mid);
@@ -319,7 +336,7 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
     };
 
     const distance = Math.abs(point.x - branchOrigin.x);
-    const bow = clamp(distance * 0.08, 5, 14) * (0.85 + rng() * 0.25);
+    const bow = clamp(distance * 0.16, 12, 30) * (0.8 + rng() * 0.35);
 
     branches.push(botanicalBranchPath(branchOrigin, point, isLeft ? -bow : bow));
   });
