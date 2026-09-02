@@ -14,7 +14,10 @@ import { fadeVolume } from "@/lib/audio/fadeVolume";
 
 const TRACK_SRC = "/audio/wedding-theme.mp3";
 
-const TARGET_VOLUME = 0.3; // 25–35% comfortable range
+// <audio>.volume is linear amplitude, not perceived loudness (which scales
+// closer to a cube law) — 0.3 here already read as noticeably louder than
+// "30%" to the ear, so the constant sits well below the on-screen target.
+const TARGET_VOLUME = 0.02;
 const FADE_IN_MS = 1800; // ~1.5–2s gentle fade-in
 const START_OFFSET_SECONDS = 16.5; // skip the track's intro, start mid-track
 const MUTE_STORAGE_KEY = "bg-music-muted";

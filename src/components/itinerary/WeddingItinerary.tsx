@@ -140,7 +140,7 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
   return (
     <div
       ref={containerRef}
-      className="relative mt-8 grid grid-cols-2 items-start gap-x-4 gap-y-7 sm:gap-x-8 sm:gap-y-9"
+      className="relative mt-6 grid grid-cols-2 items-start gap-x-4 gap-y-5 sm:gap-x-8 sm:gap-y-7"
     >
       <ItineraryPath
         stops={layout?.points ?? []}

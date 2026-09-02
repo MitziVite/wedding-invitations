@@ -6,7 +6,7 @@ import { weddingContent } from "@/content/copy/es";
 export function RsvpSection() {
   const { rsvp } = weddingContent;
   return (
-    <Section id="rsvp" tone="celadon">
+    <Section id="rsvp" tone="celadon" maxWidth="max-w-xl">
       <SectionHeading eyebrow={rsvp.eyebrow} title={rsvp.title} />
       <p className="mx-auto mt-6 max-w-md text-center font-body leading-relaxed text-espresso/80">{rsvp.body}</p>
       <RsvpForm />
