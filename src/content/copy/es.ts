@@ -6,9 +6,9 @@
  */
 export const weddingContent = {
   coupleNames: "Mitzi & Josh",
-  // Same two names, split for the stacked script lockup in the welcome
-  // photo (top name / ampersand / bottom name) — kept separate from
-  // coupleNames so the on-photo layout doesn't depend on string-splitting.
+  // Same two names, split for the mobile welcome photo's stacked script
+  // lockup (top name / ampersand / bottom name) — kept separate from
+  // coupleNames so that layout doesn't depend on string-splitting.
   names: { top: "Mitzi", bottom: "Josh" },
   date: "7 de noviembre de 2026",
   weekday: "Sábado",

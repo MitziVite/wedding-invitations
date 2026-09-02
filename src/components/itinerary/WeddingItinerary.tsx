@@ -15,6 +15,11 @@ interface MeasuredPoint {
   y: number;
 }
 
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+
+/** Keeps a node clear of both the illustration it belongs to and the trunk running down the middle. */
+const NODE_EDGE_MARGIN = 9;
+
 /**
  * The itinerary as a compact two-column grid with a central botanical vine
  * threaded behind it — a short branch reaches from the vine to each
@@ -36,7 +41,13 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
   const reducedMotion = !!useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const itemEls = useRef<(HTMLDivElement | null)[]>([]);
-  const [layout, setLayout] = useState<{ width: number; height: number; points: MeasuredPoint[] } | null>(null);
+  const [layout, setLayout] = useState<{
+    width: number;
+    height: number;
+    /** Horizontal room between the itinerary's center and the nearest illustration edge — the free channel the vine and its decorations have to live in. */
+    channelHalf: number;
+    points: MeasuredPoint[];
+  } | null>(null);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -44,38 +55,71 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
 
     function measure() {
       const containerRect = container!.getBoundingClientRect();
+      const centerX = containerRect.width / 2;
+
+      // The innermost edges the illustrations reach toward the center —
+      // everything the vine draws has to stay inside this channel, since
+      // the event cards paint on top of the SVG.
+      let leftInnerEdge = 0;
+      let rightInnerEdge = containerRect.width;
+
       const points = itemEls.current.map((el, i): MeasuredPoint => {
-        if (!el) return { x: containerRect.width / 2, y: 0 };
+        if (!el) return { x: centerX, y: 0 };
 
         const eventRect = el.getBoundingClientRect();
         const illustration = el.querySelector<HTMLElement>("[data-itinerary-illustration]");
         const illustrationRect = illustration?.getBoundingClientRect() ?? eventRect;
         const isLastCentered = events.length % 2 === 1 && i === events.length - 1;
 
+        const illustrationLeft = illustrationRect.left - containerRect.left;
+        const illustrationRight = illustrationRect.right - containerRect.left;
+
         // Final centered event: end the vine directly above the illustration.
+        // It spans both columns, so it never constrains the side channel.
         if (isLastCentered) {
           return {
-            x: illustrationRect.left - containerRect.left + illustrationRect.width / 2,
+            x: illustrationLeft + illustrationRect.width / 2,
             y: illustrationRect.top - containerRect.top - 8,
           };
         }
+
+        const isLeft = i % 2 === 0;
+        if (isLeft) leftInnerEdge = Math.max(leftInnerEdge, illustrationRight);
+        else rightInnerEdge = Math.min(rightInnerEdge, illustrationLeft);
 
         // The node is NOT pinned to the illustration's edge — it lives
         // BETWEEN the illustration and the central vine, so the image
         // reads as visually associated with its node rather than the vine
         // stretching out to touch the image (which was forcing long,
-        // nearly-horizontal branches).
-        const illustrationCenterX = illustrationRect.left - containerRect.left + illustrationRect.width / 2;
+        // nearly-horizontal branches). On narrow screens the columns get
+        // close enough that this preferred spot would land *inside* the
+        // illustration, where the card (which paints above the SVG) hides
+        // it — so it's clamped into the free channel instead.
+        const illustrationCenterX = illustrationLeft + illustrationRect.width / 2;
         const illustrationCenterY = illustrationRect.top - containerRect.top + illustrationRect.height * 0.62;
-        const centerX = containerRect.width / 2;
         // 0 = itinerary center, 1 = illustration center.
         const NODE_POSITION = 0.62;
-        return {
-          x: centerX + (illustrationCenterX - centerX) * NODE_POSITION,
-          y: illustrationCenterY,
-        };
+        const preferredX = centerX + (illustrationCenterX - centerX) * NODE_POSITION;
+
+        const lowerBound = isLeft ? illustrationRight + NODE_EDGE_MARGIN : centerX + NODE_EDGE_MARGIN;
+        const upperBound = isLeft ? centerX - NODE_EDGE_MARGIN : illustrationLeft - NODE_EDGE_MARGIN;
+        const x =
+          upperBound > lowerBound
+            ? clamp(preferredX, lowerBound, upperBound)
+            : // Channel too tight for the margins — sit midway between the
+              // illustration edge and the center rather than overlapping.
+              (centerX + (isLeft ? illustrationRight : illustrationLeft)) / 2;
+
+        return { x, y: illustrationCenterY };
       });
-      setLayout({ width: container!.offsetWidth, height: container!.offsetHeight, points });
+
+      const channelHalf = Math.max(12, Math.min(centerX - leftInnerEdge, rightInnerEdge - centerX));
+      setLayout({
+        width: container!.offsetWidth,
+        height: container!.offsetHeight,
+        channelHalf,
+        points,
+      });
     }
 
     measure();
@@ -85,7 +129,10 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
   }, [events.length]);
 
   const vine = useMemo(
-    () => (layout ? buildVine(layout.points, layout.width) : { mainD: "", branches: [], curls: [], leaves: [] }),
+    () =>
+      layout
+        ? buildVine(layout.points, layout.width, layout.channelHalf)
+        : { mainD: "", branches: [], curls: [], leaves: [] },
     [layout]
   );
   const isOdd = events.length % 2 === 1;

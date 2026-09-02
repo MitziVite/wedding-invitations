@@ -254,19 +254,22 @@ export interface VineGeometry {
  * itself) — that's what keeps branches short rather than long near-
  * horizontal lines. `points` is expected in reading order, two per row
  * (one left-column event followed by its right-column pair).
+ *
+ * `channelHalf` is the measured horizontal room between the itinerary's
+ * center and the nearest illustration edge. The event cards paint ON TOP
+ * of this SVG, so anything drawn wider than that channel is simply
+ * hidden behind them — on narrow phones the columns close in enough that
+ * a sway/decoration size tuned for desktop would bury most of the vine.
+ * Sizes are therefore capped to fit the channel that actually exists.
  */
-export function buildVine(points: Point[], containerWidth: number): VineGeometry {
+export function buildVine(points: Point[], containerWidth: number, channelHalf: number): VineGeometry {
   if (points.length === 0) return { mainD: "", branches: [], curls: [], leaves: [] };
 
   const rng = mulberry32(VINE_SEED);
   const centerX = containerWidth / 2;
-  // A clearly visible botanical sway — not a rigid, barely-moving spine.
-  // The floor is intentionally low (not a fixed 20px+) so narrow phones
-  // (320–430px) get the smaller value the formula naturally produces
-  // there, rather than being pinned up to a floor tuned for wider
-  // screens — on a narrow column, that extra sway could bring the trunk
-  // uncomfortably close to the event text/illustrations.
-  const sway = clamp(containerWidth * 0.055, 14, 42);
+  // A clearly visible botanical sway — not a rigid, barely-moving spine —
+  // but never wider than the free channel between the two columns.
+  const sway = Math.min(clamp(containerWidth * 0.055, 14, 42), channelHalf * 0.32);
 
   const rows: Point[][] = [];
   for (let i = 0; i < points.length; i += 2) rows.push(points.slice(i, i + 2));
@@ -343,9 +346,12 @@ export function buildVine(points: Point[], containerWidth: number): VineGeometry
 
   // Decorations anchor on the trunk's real intermediate waypoints — one
   // small botanical detail between rows, never exactly where a branch
-  // meets the trunk.
-  const leafSize = clamp(containerWidth * 0.048, 18, 30);
-  const curlSize = clamp(containerWidth * 0.036, 13, 22);
+  // meets the trunk. Sized to fit the free channel (minus the room the
+  // trunk's own sway already takes) so they don't end up drawn behind the
+  // event cards on narrow screens.
+  const decorationRoom = Math.max(10, channelHalf - sway);
+  const leafSize = Math.min(clamp(containerWidth * 0.048, 18, 30), decorationRoom * 0.85);
+  const curlSize = Math.min(clamp(containerWidth * 0.036, 13, 22), decorationRoom * 0.7);
   const leaves: LeafSprig[] = [];
   const curls: string[] = [];
 
