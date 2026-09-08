@@ -42,7 +42,7 @@ export function EnvelopeIntro({
   }, [stage, reducedMotion, onComplete]);
 
   return (
-    <div className="absolute inset-0">
+    <div className="fixed inset-0 z-50">
       <IntroBackdrop isOpen={isOpen} reducedMotion={reducedMotion} />
 
       <EnvelopeIntroDesktop stage={stage} reducedMotion={reducedMotion} onOpen={onOpen} />

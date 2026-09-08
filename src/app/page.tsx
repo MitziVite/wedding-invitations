@@ -61,7 +61,7 @@ export default function Home() {
     <>
       <main className="relative w-full">
         {/* Full-viewport hero: the envelope opens to reveal the garden. */}
-        <section className="relative h-[100svh] w-full overflow-hidden">
+        <section className="relative h-dvh w-full overflow-hidden">
           <GardenHero
             revealed={stage !== "idle"}
             reducedMotion={reducedMotion}
