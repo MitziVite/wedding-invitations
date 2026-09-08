@@ -5,7 +5,6 @@ export const MAX_CHILDREN = 10;
 /** Shared between the client (immediate feedback) and the API route (source of truth — never trust the client alone). */
 export const rsvpSubmitSchema = z.object({
   contactName: z.string().trim().min(2).max(80),
-  contactEmail: z.union([z.literal(""), z.string().trim().email().max(120)]).optional(),
   attending: z.enum(["yes", "no"]),
   plusOneName: z.string().trim().max(80).optional(),
   childrenCount: z.number().int().min(0).max(MAX_CHILDREN),

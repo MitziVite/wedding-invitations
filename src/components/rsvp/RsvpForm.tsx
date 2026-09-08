@@ -24,6 +24,7 @@ export function RsvpForm() {
   const [status, setStatus] = useState<Status>("form");
   const [renderedAt] = useState(() => Date.now());
 
+  const [contactName, setContactName] = useState("");
   const [attending, setAttending] = useState<"yes" | "no" | null>(null);
   const [hasPlusOne, setHasPlusOne] = useState<"yes" | "no" | null>(null);
   const [plusOneName, setPlusOneName] = useState("");
@@ -34,8 +35,6 @@ export function RsvpForm() {
   }
   const [childrenCount, setChildrenCount] = useState(0);
   const [message, setMessage] = useState("");
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [submitError, setSubmitError] = useState("");
 
@@ -54,7 +53,6 @@ export function RsvpForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contactName,
-          contactEmail,
           attending,
           plusOneName: attending === "yes" && hasPlusOne === "yes" ? plusOneName : "",
           childrenCount: attending === "yes" ? childrenCount : 0,
@@ -129,7 +127,17 @@ export function RsvpForm() {
           className="absolute -left-[9999px] h-0 w-0 opacity-0"
         />
 
-        {/* The attendance decision is the form's first and most dominant
+        <label className="flex flex-col gap-2">
+          <span className={labelClass}>{rsvp.contactNameLabel}</span>
+          <input
+            required
+            className={inputClass}
+            value={contactName}
+            onChange={(e) => setContactName(e.target.value)}
+          />
+        </label>
+
+        {/* The attendance decision is the form's next and most dominant
             interaction — a display-font question instead of a small muted
             label, with two large selectable cards rather than compact
             buttons. */}
@@ -232,26 +240,6 @@ export function RsvpForm() {
             </label>
           </>
         )}
-
-        <label className="flex flex-col gap-2">
-          <span className={labelClass}>{rsvp.contactNameLabel}</span>
-          <input
-            required
-            className={inputClass}
-            value={contactName}
-            onChange={(e) => setContactName(e.target.value)}
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span className={labelClass}>{rsvp.contactEmailLabel}</span>
-          <input
-            type="email"
-            className={inputClass}
-            value={contactEmail}
-            onChange={(e) => setContactEmail(e.target.value)}
-          />
-        </label>
 
         {submitError && (
           <p className="font-body text-sm font-semibold text-espresso" role="alert">

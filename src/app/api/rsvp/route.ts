@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { contactName, contactEmail, attending, plusOneName, childrenCount, message } = parsed.data;
-    const submission = { contactName, contactEmail, attending, plusOneName, childrenCount, message };
+    const { contactName, attending, plusOneName, childrenCount, message } = parsed.data;
+    const submission = { contactName, attending, plusOneName, childrenCount, message };
     const result = await callAppsScript<{ ok: boolean; error?: string }>(submission);
     if (!result.ok) {
       return NextResponse.json<ErrorResult>({ ok: false, error: result.error ?? "rejected" }, { status: 422 });

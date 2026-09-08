@@ -148,7 +148,6 @@ export const weddingContent = {
     messageLabel: "¿Quieres dejarnos un mensaje?",
     messagePlaceholder: "Opcional",
     contactNameLabel: "Nombre completo de quien confirma",
-    contactEmailLabel: "Correo (opcional)",
     submitCta: "Confirmar asistencia",
     submitting: "Enviando…",
     successTitle: "¡Gracias por confirmar!",
