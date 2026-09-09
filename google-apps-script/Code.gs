@@ -61,7 +61,6 @@ function handleSubmit(body) {
     sanitizeCell_(body.plusOneName),
     childrenCount,
     sanitizeCell_(body.message),
-    sanitizeCell_(body.contactEmail),
     now,
   ]);
 

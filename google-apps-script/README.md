@@ -10,7 +10,7 @@ Un Sheet nuevo con una pestaña **`Responses`** (Apps Script la llena sola —
 solo crea la fila de encabezados):
 
 ```
-contactName | attending | plusOneName | childrenCount | message | contactEmail | submittedAt
+contactName | attending | plusOneName | childrenCount | message | submittedAt
 ```
 
 No hay códigos de invitación ni lista previa de invitados: cualquiera que

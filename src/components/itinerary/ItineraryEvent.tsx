@@ -43,13 +43,10 @@ export function ItineraryEvent({ event, reducedMotion, index }: ItineraryEventPr
     >
       <ItineraryIllustration src={event.image} alt={event.alt} />
       <div className="mx-auto max-w-[7.5rem] sm:max-w-[9.5rem]">
-        <p className="font-body text-[9px] tracking-[0.1em] text-espresso/70 tabular-nums uppercase sm:text-[10px] sm:tracking-[0.12em]">
+        <p className="font-body text-[9px] tracking-[0.04em] whitespace-nowrap text-espresso/70 tabular-nums uppercase sm:text-[10px] sm:tracking-[0.12em]">
           {event.time}
         </p>
         <p className="mt-0.5 font-display text-sm leading-snug text-espresso sm:text-base">{event.title}</p>
-        {event.subtitle ? (
-          <p className="mt-0.5 font-body text-[11px] text-espresso/80 sm:text-xs">{event.subtitle}</p>
-        ) : null}
       </div>
     </motion.div>
   );
