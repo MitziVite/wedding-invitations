@@ -111,17 +111,17 @@ export const weddingContent: WeddingContent = {
       },
       {
         time: "6:15 p. m.",
-        title: "Primer baile",
-        subtitle: "El primero de muchos",
-        image: "/images/itinerary/primer-baile.png",
-        alt: "Ilustración acuarela de los novios bailando",
-      },
-      {
-        time: "6:20 p. m.",
         title: "Unas palabras",
         subtitle: "Con todo nuestro cariño",
         image: "/images/itinerary/palabras.png",
         alt: "Ilustración acuarela de un micrófono floral",
+      },
+      {
+        time: "6:20 p. m.",
+        title: "Primer baile",
+        subtitle: "El primero de muchos",
+        image: "/images/itinerary/primer-baile.png",
+        alt: "Ilustración acuarela de los novios bailando",
       },
       {
         time: "6:30 p. m.",
