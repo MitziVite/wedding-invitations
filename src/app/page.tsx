@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { GardenHero } from "@/components/hero/GardenHero";
 import { EnvelopeIntro } from "@/components/envelope/EnvelopeIntro";
+import { EnvelopeControls } from "@/components/envelope/EnvelopeControls";
 import { useEnvelopeState } from "@/components/envelope/useEnvelopeState";
 import { FairyCursor } from "@/components/FairyCursor";
 import { WeddingSections } from "@/components/sections/WeddingSections";
@@ -104,13 +105,16 @@ export default function Home() {
                 startMusic();
               }}
               onComplete={() => dispatch({ type: "COMPLETE" })}
-              onSkip={() => dispatch({ type: "SKIP" })}
             />
           )}
         </section>
 
         <WeddingSections />
       </main>
+      {/* Rendered as a sibling of EnvelopeIntro, not nested inside it — see
+          EnvelopeControls for why (an iOS Safari compositing bug with the
+          envelope's 3D-transformed panels). */}
+      {stage !== "done" && <EnvelopeControls onSkip={() => dispatch({ type: "SKIP" })} />}
       <FairyCursor />
       {stage === "done" && (
         <>
