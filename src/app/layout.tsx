@@ -46,12 +46,16 @@ export const metadata: Metadata = {
     title: "M & J — Nuestra boda",
     description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
   },
+  // Suppress Chrome's own "Translate this page?" prompt — the site already
+  // has its own ES/EN toggle, so that banner is redundant and covers content.
+  other: { google: "notranslate" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
+      translate="no"
       className={`${cormorant.variable} ${raleway.variable} ${bodoniModa.variable} ${allura.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-espresso">

@@ -54,8 +54,12 @@ export function EnvelopeIntro({
       {/* A small pill toggle with both options always visible — the active
           language sits on a gold chip (the same selected-state treatment
           used on the RSVP form's cards), so it reads as a real switch
-          rather than a link, while staying compact and quiet. */}
-      <div className="absolute top-5 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border border-ivory/25 bg-black/15 p-1 backdrop-blur-sm">
+          rather than a link, while staying compact and quiet. Explicit
+          z-index (not just later DOM order) — on real iOS Safari, a
+          sibling with a 3D transform context (the mobile envelope's
+          `perspective`) can otherwise end up painted on top regardless of
+          DOM order. */}
+      <div className="absolute top-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 rounded-full border border-ivory/25 bg-black/15 p-1 backdrop-blur-sm">
         {(["es", "en"] as const).map((lang) => {
           const selected = language === lang;
           return (
@@ -77,7 +81,7 @@ export function EnvelopeIntro({
       <button
         type="button"
         onClick={onSkip}
-        className="absolute right-5 bottom-5 rounded px-3 py-2 font-body text-xs tracking-wide text-ivory/80 transition-colors hover:text-ivory hover:underline focus-visible:text-ivory focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className="absolute right-5 bottom-5 z-20 rounded px-3 py-2 font-body text-xs tracking-wide text-ivory/80 transition-colors hover:text-ivory hover:underline focus-visible:text-ivory focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       >
         {common.skipIntro}
       </button>

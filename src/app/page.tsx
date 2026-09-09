@@ -9,6 +9,7 @@ import { FairyCursor } from "@/components/FairyCursor";
 import { WeddingSections } from "@/components/sections/WeddingSections";
 import { useBackgroundMusic } from "@/components/audio/BackgroundMusicProvider";
 import { MuteToggle } from "@/components/audio/MuteToggle";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 const SESSION_KEY = "envelope-intro-seen";
 const REPLAY_PARAM = "replay-intro";
@@ -111,7 +112,12 @@ export default function Home() {
         <WeddingSections />
       </main>
       <FairyCursor />
-      {stage === "done" && <MuteToggle />}
+      {stage === "done" && (
+        <>
+          <MuteToggle />
+          <LanguageToggle />
+        </>
+      )}
     </>
   );
 }
