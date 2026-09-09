@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Raleway, Bodoni_Moda, Allura } from "next/font/google";
 import { BackgroundMusicProvider } from "@/components/audio/BackgroundMusicProvider";
+import { LanguageProvider } from "@/content/LanguageProvider";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -42,7 +43,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cormorant.variable} ${raleway.variable} ${bodoniModa.variable} ${allura.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-espresso">
-        <BackgroundMusicProvider>{children}</BackgroundMusicProvider>
+        <LanguageProvider>
+          <BackgroundMusicProvider>{children}</BackgroundMusicProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

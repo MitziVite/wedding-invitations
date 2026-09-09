@@ -12,6 +12,10 @@ interface SectionProps {
   className?: string;
   /** Override the default max-w-2xl content column — e.g. the timeline wants more room to wind. */
   maxWidth?: string;
+  /** Override the default py-20 sm:py-24 vertical rhythm — e.g. the timeline needs to fit tighter to a single screen. */
+  paddingY?: string;
+  /** At least one full viewport tall, content vertically centered — matches the hero and welcome sections. Content taller than the viewport (e.g. the itinerary) still grows past it normally. */
+  fullHeight?: boolean;
 }
 
 const TONE_CLASS: Record<Tone, string> = {
@@ -27,11 +31,22 @@ const TONE_CLASS: Record<Tone, string> = {
  * it scrolls into view (once). Tone sets the palette so sections can
  * alternate. Reveal is disabled for reduced motion.
  */
-export function Section({ id, tone = "ivory", children, className = "", maxWidth = "max-w-2xl" }: SectionProps) {
+export function Section({
+  id,
+  tone = "ivory",
+  children,
+  className = "",
+  maxWidth = "max-w-2xl",
+  paddingY = "py-20 sm:py-24",
+  fullHeight = false,
+}: SectionProps) {
   const reducedMotion = useReducedMotion();
 
   return (
-    <section id={id} className={`w-full px-6 py-20 sm:py-24 ${TONE_CLASS[tone]}`}>
+    <section
+      id={id}
+      className={`w-full px-6 ${paddingY} ${TONE_CLASS[tone]} ${fullHeight ? "flex min-h-dvh flex-col justify-center" : ""}`}
+    >
       <motion.div
         className={`mx-auto w-full ${maxWidth} ${className}`}
         initial={reducedMotion ? false : { opacity: 0, y: 26 }}

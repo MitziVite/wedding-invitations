@@ -20,7 +20,7 @@ export function ItineraryIllustration({ src, alt }: ItineraryIllustrationProps) 
   return (
     <span
       data-itinerary-illustration
-      className="relative block h-20 w-20 shrink-0 drop-shadow-md sm:h-24 sm:w-24 md:h-28 md:w-28"
+      className="relative block h-12 w-12 shrink-0 drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem] md:h-20 md:w-20"
     >
       <Image src={src} alt={alt} fill sizes="(min-width: 768px) 7rem, (min-width: 640px) 6rem, 5rem" className="object-contain" />
     </span>

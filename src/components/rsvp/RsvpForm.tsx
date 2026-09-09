@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { weddingContent } from "@/content/copy/es";
+import { useWeddingContent } from "@/content/LanguageProvider";
 import { MAX_CHILDREN } from "@/lib/rsvp/schema";
 
 type Status = "form" | "submitting" | "success";
 
 const inputClass =
-  "w-full rounded-lg border border-taupe/30 bg-warm-ivory px-4 py-3.5 font-body text-espresso placeholder:text-espresso/40 transition-colors focus:border-gold focus:ring-2 focus:ring-gold/50 focus:outline-none";
+  "w-full rounded-lg border border-taupe/30 bg-warm-ivory px-4 py-3 font-body text-espresso placeholder:text-espresso/40 transition-colors focus:border-gold focus:ring-2 focus:ring-gold/50 focus:outline-none sm:py-3.5";
 const labelClass = "font-body text-sm text-espresso/80";
 
 /** Small check mark used inside the selected attendance card. */
@@ -20,7 +20,7 @@ function CheckIcon() {
 }
 
 export function RsvpForm() {
-  const { rsvp } = weddingContent;
+  const { rsvp } = useWeddingContent();
   const [status, setStatus] = useState<Status>("form");
   const [renderedAt] = useState(() => Date.now());
 
@@ -78,7 +78,7 @@ export function RsvpForm() {
   // it, with generous top margin so it reads as an aside, not part of the
   // form's own visual weight.
   const contactNote = (
-    <p className="mt-10 max-w-sm text-center font-body text-xs leading-relaxed text-espresso/60">
+    <p className="mt-6 max-w-sm text-center font-body text-xs leading-relaxed text-espresso/60 sm:mt-10">
       {rsvp.guestQuestionNote}
       <span className="mt-2 flex justify-center gap-4">
         {Object.values(rsvp.whatsapp).map((contact) => (
@@ -106,14 +106,14 @@ export function RsvpForm() {
   }
 
   return (
-    <div className="mt-10 flex w-full flex-col items-center">
+    <div className="mt-6 flex w-full flex-col items-center sm:mt-10">
       {/* Very subtle translucent surface — a warmer tint than the sage
           section behind it, not a heavy card (soft border, no strong
           shadow) — so the form gets real visual presence without breaking
           out of the section's palette. */}
       <form
         onSubmit={handleSubmit}
-        className="flex w-full flex-col gap-6 rounded-3xl border border-gold/15 bg-warm-ivory/40 px-5 py-8 shadow-sm shadow-espresso/5 sm:px-10 sm:py-10"
+        className="flex w-full flex-col gap-4 rounded-3xl border border-gold/15 bg-warm-ivory/40 px-4 py-5 shadow-sm shadow-espresso/5 sm:gap-6 sm:px-10 sm:py-10"
       >
         {/* Honeypot — visually hidden, never filled by a real guest. */}
         <input
@@ -141,9 +141,9 @@ export function RsvpForm() {
             interaction — a display-font question instead of a small muted
             label, with two large selectable cards rather than compact
             buttons. */}
-        <fieldset className="flex flex-col gap-3">
-          <legend className="mb-1 font-display text-xl text-espresso">{rsvp.attendingLabel}</legend>
-          <div className="flex flex-col gap-3 sm:flex-row">
+        <fieldset className="flex flex-col gap-2 sm:gap-3">
+          <legend className="mb-1 font-display text-lg text-espresso sm:text-xl">{rsvp.attendingLabel}</legend>
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
             {(["yes", "no"] as const).map((value) => {
               const selected = attending === value;
               return (
@@ -152,7 +152,7 @@ export function RsvpForm() {
                   type="button"
                   onClick={() => setAttending(value)}
                   aria-pressed={selected}
-                  className={`flex min-h-[3.25rem] flex-1 items-center justify-center gap-2 rounded-xl border px-5 py-4 font-body text-base transition-colors sm:min-h-[3.75rem] ${
+                  className={`flex min-h-[2.75rem] flex-1 items-center justify-center gap-2 rounded-xl border px-5 py-3 font-body text-base transition-colors sm:min-h-[3.75rem] sm:py-4 ${
                     selected
                       ? "border-gold bg-gold/20 text-espresso font-medium"
                       : "border-taupe/35 bg-transparent text-espresso/70 hover:border-gold/50 hover:bg-warm-ivory/60"
@@ -170,7 +170,7 @@ export function RsvpForm() {
           <>
             <div className="flex flex-col gap-2">
               <span className={labelClass}>{rsvp.plusOneLabel}</span>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 {(["yes", "no"] as const).map((value) => {
                   const selected = hasPlusOne === value;
                   return (
@@ -179,7 +179,7 @@ export function RsvpForm() {
                       type="button"
                       onClick={() => selectPlusOne(value)}
                       aria-pressed={selected}
-                      className={`flex-1 rounded-lg border px-4 py-3 font-body text-sm transition-colors ${
+                      className={`flex-1 rounded-lg border px-4 py-2.5 font-body text-sm transition-colors sm:py-3 ${
                         selected
                           ? "border-gold bg-gold/20 text-espresso font-medium"
                           : "border-taupe/35 bg-transparent text-espresso/70 hover:border-gold/50 hover:bg-warm-ivory/60"
@@ -250,7 +250,7 @@ export function RsvpForm() {
         <button
           type="submit"
           disabled={!attending || status === "submitting"}
-          className="mt-1 rounded-lg border border-gold bg-gold px-6 py-4 font-body text-sm tracking-[0.15em] text-espresso uppercase transition-colors hover:bg-gold/85 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-1 rounded-lg border border-gold bg-gold px-6 py-3.5 font-body text-sm tracking-[0.15em] text-espresso uppercase transition-colors hover:bg-gold/85 disabled:cursor-not-allowed disabled:opacity-50 sm:py-4"
         >
           {status === "submitting" ? rsvp.submitting : rsvp.submitCta}
         </button>

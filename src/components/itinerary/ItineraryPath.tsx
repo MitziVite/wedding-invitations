@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { VineGeometry } from "@/lib/path/windingPath";
+import { NODE_OUTER_RADIUS, type VineGeometry } from "@/lib/path/windingPath";
 
 interface Stop {
   x: number;
@@ -32,7 +32,7 @@ export function ItineraryPath({ stops, vine, width, height, reducedMotion }: Iti
 
   return (
     <svg
-      className="pointer-events-none absolute inset-0 h-full w-full"
+      className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
       viewBox={`0 0 ${width} ${height}`}
       aria-hidden="true"
     >
@@ -87,12 +87,17 @@ export function ItineraryPath({ stops, vine, width, height, reducedMotion }: Iti
 
         {vine.leaves.map((leaf, i) => (
           <g key={`leaf-${i}`}>
+            {/* A small dot right where this sprig meets the trunk — two
+                thick strokes diverging sharply from the same point can
+                leave a visible notch between their rounded caps; this
+                covers the seam so it reads as one continuous line. */}
+            <circle cx={leaf.anchor.x} cy={leaf.anchor.y} r={1.1} className="fill-gold" vectorEffect="non-scaling-stroke" />
             <path
               d={leaf.stemD}
               className="stroke-gold"
               fill="none"
-              strokeOpacity={0.84}
-              strokeWidth={1.15}
+              strokeOpacity={0.88}
+              strokeWidth={1.75}
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
             />
@@ -125,21 +130,19 @@ export function ItineraryPath({ stops, vine, width, height, reducedMotion }: Iti
       </motion.g>
 
       {stops.map((s, i) => (
-        <motion.circle
+        <motion.g
           key={i}
-          className="fill-gold"
-          cx={s.x}
-          cy={s.y}
-          r={6}
-          stroke="#ae894f"
-          strokeWidth={1.4}
-          vectorEffect="non-scaling-stroke"
-          style={{ filter: "drop-shadow(0 1px 2px rgba(90,60,30,0.22))" }}
+          style={{ filter: "drop-shadow(0 1px 2px rgba(90,60,30,0.18))" }}
           initial={reducedMotion ? false : { scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.3, delay: reducedMotion ? 0 : 0.6 + i * 0.06, ease: "easeOut" }}
-        />
+        >
+          {/* A hollow ring encircling the filled dot, with a visible gap
+              between them — not a stroke touching the dot's own edge. */}
+          <circle cx={s.x} cy={s.y} r={NODE_OUTER_RADIUS} fill="none" stroke="#c7a56a" strokeWidth={1.1} vectorEffect="non-scaling-stroke" />
+          <circle cx={s.x} cy={s.y} r={5.5} fill="#ae894f" />
+        </motion.g>
       ))}
     </svg>
   );

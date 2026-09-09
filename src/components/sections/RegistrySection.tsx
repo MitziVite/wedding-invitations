@@ -1,12 +1,14 @@
+"use client";
+
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { LinkButton } from "@/components/ui/LinkButton";
-import { weddingContent } from "@/content/copy/es";
+import { useWeddingContent } from "@/content/LanguageProvider";
 
 export function RegistrySection() {
-  const { registry } = weddingContent;
+  const { registry } = useWeddingContent();
   return (
-    <Section id="regalos" tone="ivory">
+    <Section id="regalos" tone="ivory" fullHeight>
       <SectionHeading eyebrow={registry.eyebrow} title={registry.title} />
       <p className="mx-auto mt-6 max-w-md text-center font-body leading-relaxed text-espresso/85">
         {registry.body}

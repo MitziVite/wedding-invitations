@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useWeddingContent } from "@/content/LanguageProvider";
 
 interface WaxSealProps {
   isOpen: boolean;
@@ -22,14 +23,15 @@ const SEAL_BACKGROUND_POSITION = "89% 68%";
 
 export function WaxSeal({ isOpen, disabled, reducedMotion, onOpen }: WaxSealProps) {
   const hoverFocusScale = reducedMotion || disabled ? undefined : { scale: 1.04 };
+  const { common } = useWeddingContent();
 
   return (
     <motion.button
       type="button"
       onClick={onOpen}
       disabled={disabled}
-      aria-label="Abrir la invitación"
-      className="absolute top-1/2 left-1/2 z-10 h-24 w-24 min-h-16 min-w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-no-repeat focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:cursor-default sm:h-28 sm:w-28"
+      aria-label={common.openInvitationAria}
+      className="absolute top-1/2 left-1/2 z-10 h-28 w-28 min-h-20 min-w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-no-repeat focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:cursor-default sm:h-32 sm:w-32"
       style={{
         backgroundImage: "url(/images/envelope/wax-seal.png)",
         backgroundSize: SEAL_BACKGROUND_SIZE,

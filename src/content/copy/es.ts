@@ -1,10 +1,12 @@
+import type { WeddingContent } from "./types";
+
 /**
  * All Spanish copy for the sections below the hero. Placeholder values are
  * wrapped in [brackets] (or clearly noted) so the real event details can be
  * dropped in later without touching component code. Couple names are
  * placeholders too — swap them for the real ones.
  */
-export const weddingContent = {
+export const weddingContent: WeddingContent = {
   coupleNames: "Mitzi & Josh",
   // Same two names, split for the mobile welcome photo's stacked script
   // lockup (top name / ampersand / bottom name) — kept separate from
@@ -12,6 +14,10 @@ export const weddingContent = {
   names: { top: "Mitzi", bottom: "Josh" },
   date: "7 de noviembre de 2026",
   weekday: "Sábado",
+
+  hero: {
+    subtitle: "Nuestro para siempre comienza aquí",
+  },
 
   welcome: {
     // The couple's photo. Leave empty to show the placeholder block.
@@ -22,6 +28,9 @@ export const weddingContent = {
     year: "2026",
     // Local date/time the countdown ticks down to (ceremony start, 10:00 a. m.).
     countdownTargetISO: "2026-11-07T10:00:00",
+    countdownHeading: "Faltan",
+    countdownLabels: { days: "Días", hours: "Horas", minutes: "Min", seconds: "Seg" },
+    photoPlaceholder: "Agrega la foto de la pareja",
   },
 
   invitation: {
@@ -218,4 +227,10 @@ export const weddingContent = {
   },
 
   footer: "Mitzi & Josh · 7 de noviembre de 2026",
-} as const;
+
+  common: {
+    mapCta: "Ver mapa",
+    skipIntro: "Saltar introducción",
+    openInvitationAria: "Abrir la invitación",
+  },
+};

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { weddingContent } from "@/content/copy/es";
+import { useWeddingContent } from "@/content/LanguageProvider";
 
 interface TimeLeft {
   days: number;
@@ -66,7 +66,7 @@ function HeartOrnament({ double = false, className = "" }: { double?: boolean; c
  * (drop in the real photo, change the target date, etc.).
  */
 export function WelcomeCard() {
-  const { coupleNames, names, weekday, welcome } = weddingContent;
+  const { coupleNames, names, weekday, welcome } = useWeddingContent();
   const targetMs = new Date(welcome.countdownTargetISO).getTime();
 
   // Seeded from a lazy initializer (real value on the client) and ticked by an
@@ -80,10 +80,10 @@ export function WelcomeCard() {
   }, [targetMs]);
 
   const units = [
-    { label: "Días", value: timeLeft.days.toString() },
-    { label: "Horas", value: pad(timeLeft.hours) },
-    { label: "Min", value: pad(timeLeft.minutes) },
-    { label: "Seg", value: pad(timeLeft.seconds) },
+    { label: welcome.countdownLabels.days, value: timeLeft.days.toString() },
+    { label: welcome.countdownLabels.hours, value: pad(timeLeft.hours) },
+    { label: welcome.countdownLabels.minutes, value: pad(timeLeft.minutes) },
+    { label: welcome.countdownLabels.seconds, value: pad(timeLeft.seconds) },
   ];
 
   return (
@@ -103,7 +103,7 @@ export function WelcomeCard() {
             <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 21s-7.5-4.9-10-9.3C.6 8.9 2 6 4.9 6c1.9 0 3.2 1.1 4 2.2C9.7 7.1 11 6 12.9 6 15.8 6 17.2 8.9 15.9 11.7 13.5 16.1 12 21 12 21z" />
             </svg>
-            <p className="mt-3 font-body text-sm tracking-wide">Agrega la foto de la pareja</p>
+            <p className="mt-3 font-body text-sm tracking-wide">{welcome.photoPlaceholder}</p>
           </div>
         )}
 
@@ -192,7 +192,7 @@ export function WelcomeCard() {
               <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 21s-7.5-4.9-10-9.3C.6 8.9 2 6 4.9 6c1.9 0 3.2 1.1 4 2.2C9.7 7.1 11 6 12.9 6 15.8 6 17.2 8.9 15.9 11.7 13.5 16.1 12 21 12 21z" />
               </svg>
-              <p className="mt-3 font-body text-sm tracking-wide">Agrega la foto de la pareja</p>
+              <p className="mt-3 font-body text-sm tracking-wide">{welcome.photoPlaceholder}</p>
             </div>
           )}
         </div>
@@ -234,7 +234,7 @@ export function WelcomeCard() {
         {/* No connecting heart here on either breakpoint — the flow runs
             straight from the weekday row into "Faltan" with generous
             whitespace instead of an ornament. */}
-        <p className="mt-10 mb-5 font-body text-xs tracking-[0.3em] text-espresso/70 uppercase sm:mt-8 sm:mb-5">Faltan</p>
+        <p className="mt-10 mb-5 font-body text-xs tracking-[0.3em] text-espresso/70 uppercase sm:mt-8 sm:mb-5">{welcome.countdownHeading}</p>
         <div className="grid grid-cols-4 sm:gap-x-2">
           {units.map((u, i) => (
             <div

@@ -8,6 +8,7 @@ import { SparkleField } from "./SparkleField";
 import { LanternCalibrator } from "./LanternCalibrator";
 import { useElementSize } from "./useElementSize";
 import { coverBox, GARDEN_INTRINSIC } from "./coverGeometry";
+import { useWeddingContent } from "@/content/LanguageProvider";
 
 const GARDEN_SRC = "/images/hero/garden-desktop.png";
 
@@ -94,6 +95,7 @@ export function GardenHero({
 }: GardenHeroProps) {
   const speed = debugReveal ? DEBUG_SPEED_MULTIPLIER : 1;
   const [containerRef, { width, height }] = useElementSize<HTMLDivElement>();
+  const { hero } = useWeddingContent();
 
   // Read once at mount: a returning visitor within the session (revealed
   // already true) starts settled, without replaying the reveal.
@@ -199,7 +201,7 @@ export function GardenHero({
       <SparkleField revealed={revealed} reducedMotion={reducedMotion} />
 
       <HeroTextOverlay
-        subtitle="Our forever begins here"
+        subtitle={hero.subtitle}
         visible={typographyVisible}
         reducedMotion={reducedMotion}
       />

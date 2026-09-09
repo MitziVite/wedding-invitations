@@ -21,6 +21,16 @@ const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(mi
 const NODE_EDGE_MARGIN = 9;
 
 /**
+ * How far each row's stop is pulled inward, toward the vine, in pixels —
+ * cycled row by row so alternating rows sit at a different distance from
+ * center instead of every stop sitting exactly as far out as the last.
+ * Real DOM measurement in `measure()` below picks up wherever each
+ * illustration actually lands after this, so the branch reaching it comes
+ * out correspondingly longer or shorter with no separate bookkeeping.
+ */
+const ROW_INSET_PX = [0, 30, 10, 38];
+
+/**
  * The itinerary as a compact two-column grid with a central botanical vine
  * threaded behind it — a short branch reaches from the vine to each
  * stop's node. Nodes sit BETWEEN the illustration and the vine (not
@@ -79,7 +89,7 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
         if (isLastCentered) {
           return {
             x: illustrationLeft + illustrationRect.width / 2,
-            y: illustrationRect.top - containerRect.top - 8,
+            y: illustrationRect.top - containerRect.top - 22,
           };
         }
 
@@ -98,7 +108,7 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
         const illustrationCenterX = illustrationLeft + illustrationRect.width / 2;
         const illustrationCenterY = illustrationRect.top - containerRect.top + illustrationRect.height * 0.62;
         // 0 = itinerary center, 1 = illustration center.
-        const NODE_POSITION = 0.62;
+        const NODE_POSITION = 0.5;
         const preferredX = centerX + (illustrationCenterX - centerX) * NODE_POSITION;
 
         const lowerBound = isLeft ? illustrationRight + NODE_EDGE_MARGIN : centerX + NODE_EDGE_MARGIN;
@@ -140,7 +150,7 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
   return (
     <div
       ref={containerRef}
-      className="relative mt-6 grid grid-cols-2 items-start gap-x-4 gap-y-5 sm:gap-x-8 sm:gap-y-7"
+      className="relative grid grid-cols-2 items-start gap-x-4 gap-y-1 px-2 pt-20 sm:gap-x-8 sm:gap-y-3 sm:px-8 md:px-16 lg:px-24"
     >
       <ItineraryPath
         stops={layout?.points ?? []}
@@ -155,6 +165,8 @@ export function WeddingItinerary({ events }: WeddingItineraryProps) {
           event={event}
           reducedMotion={reducedMotion}
           spanFull={isOdd && i === events.length - 1}
+          side={i % 2 === 0 ? "left" : "right"}
+          insetPx={ROW_INSET_PX[Math.floor(i / 2) % ROW_INSET_PX.length]}
           rowRef={(el) => {
             itemEls.current[i] = el;
           }}

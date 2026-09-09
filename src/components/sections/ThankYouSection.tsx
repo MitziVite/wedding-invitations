@@ -1,9 +1,11 @@
+"use client";
+
 import { Section } from "@/components/ui/Section";
 import { Ornament } from "@/components/ui/Ornament";
-import { weddingContent } from "@/content/copy/es";
+import { useWeddingContent } from "@/content/LanguageProvider";
 
 export function ThankYouSection() {
-  const { thankYou } = weddingContent;
+  const { thankYou } = useWeddingContent();
   return (
     <Section id="gracias" tone="cocoa">
       <div className="flex flex-col items-center text-center">
