@@ -81,7 +81,7 @@ export function CeremonySection() {
         <motion.div variants={v(fadeIn(REVEAL_DELAYS.note, 0.9))} className="mt-3 max-w-md sm:mt-4">
           <p className="font-display text-base text-espresso/80 italic sm:text-xl">{ceremony.note}</p>
           {ceremony.noteAuthor ? (
-            <p className="mt-1 font-body text-xs tracking-[0.08em] text-espresso/50 uppercase sm:mt-1.5">
+            <p className="mt-1 font-body text-xs tracking-[0.08em] text-espresso/80 uppercase sm:mt-1.5">
               — {ceremony.noteAuthor}
             </p>
           ) : null}

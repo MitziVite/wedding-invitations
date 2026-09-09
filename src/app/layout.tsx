@@ -33,7 +33,19 @@ export const metadata: Metadata = {
   title: "M & J — Nuestra boda",
   description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
   // Private, invite-only site — never meant to be searchable or indexed.
+  // Chat-app link-preview crawlers (WhatsApp, iMessage, etc.) don't
+  // respect this, so the Open Graph fields below still matter.
   robots: { index: false, follow: false, nocache: true },
+  openGraph: {
+    title: "M & J — Nuestra boda",
+    description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "M & J — Nuestra boda",
+    description: "Invitación de boda de M & J — 7 de noviembre de 2026.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

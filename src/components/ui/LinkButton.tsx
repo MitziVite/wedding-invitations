@@ -7,6 +7,8 @@ interface LinkButtonProps {
   children: ReactNode;
   variant?: Variant;
   className?: string;
+  /** File name for a same-site download (e.g. a generated .ics) — skips the external-link target/rel, which don't apply to a download. */
+  download?: string;
 }
 
 const VARIANT_CLASS: Record<Variant, string> = {
@@ -16,11 +18,12 @@ const VARIANT_CLASS: Record<Variant, string> = {
 };
 
 /** A consistent, accessible link styled as a button (map links, registry, etc.). */
-export function LinkButton({ href, children, variant = "outline", className = "" }: LinkButtonProps) {
-  const external = href !== "#" && !href.startsWith("#");
+export function LinkButton({ href, children, variant = "outline", className = "", download }: LinkButtonProps) {
+  const external = !download && href !== "#" && !href.startsWith("#");
   return (
     <a
       href={href}
+      {...(download ? { download } : {})}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={`inline-flex items-center justify-center rounded-sm border px-6 py-3 font-body text-sm tracking-wide uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${VARIANT_CLASS[variant]} ${className}`}
     >

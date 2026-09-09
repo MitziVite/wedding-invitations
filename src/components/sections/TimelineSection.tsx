@@ -10,7 +10,7 @@ export function TimelineSection() {
   const events = timeline.events;
 
   return (
-    <Section id="itinerario" tone="blush" paddingY="py-4 sm:py-10" fullHeight>
+    <Section id="itinerario" tone="blush" paddingY="py-3 sm:py-10" fullHeight>
       <SectionHeading eyebrow={timeline.eyebrow} title={timeline.title} />
       <WeddingItinerary events={events} />
     </Section>

@@ -16,9 +16,10 @@ export interface RegistryOptionContent {
   url: string;
 }
 
-export interface WhatsappContactContent {
+export interface PhoneContactContent {
   name: string;
-  url: string;
+  /** Display-ready, e.g. "+52 55 1234 5678" — a tel: link is derived from it by stripping whitespace. */
+  phone: string;
 }
 
 /** Shape shared by every language's copy file — see `es.ts` / `en.ts`. */
@@ -61,6 +62,10 @@ export interface WeddingContent {
     note: string;
     noteAuthor: string;
     mapUrl: string;
+    /** UTC instants (not local wall-clock) so the .ics/calendar link shows the correct moment regardless of the guest's own timezone. */
+    startUTC: string;
+    endUTC: string;
+    addToCalendarCta: string;
   };
 
   reception: {
@@ -73,6 +78,9 @@ export interface WeddingContent {
     address: string;
     note: string;
     mapUrl: string;
+    startUTC: string;
+    endUTC: string;
+    addToCalendarCta: string;
   };
 
   timeline: {
@@ -105,7 +113,7 @@ export interface WeddingContent {
     successBody: string;
     errorBody: string;
     guestQuestionNote: string;
-    whatsapp: { mitzi: WhatsappContactContent; josh: WhatsappContactContent };
+    contacts: { mitzi: PhoneContactContent; josh: PhoneContactContent };
   };
 
   faq: {

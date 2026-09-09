@@ -3,11 +3,13 @@
 import { useState, type FormEvent } from "react";
 import { useWeddingContent } from "@/content/LanguageProvider";
 import { MAX_CHILDREN } from "@/lib/rsvp/schema";
+import { buildGoogleCalendarUrl } from "@/lib/calendar/googleCalendar";
+import { LinkButton } from "@/components/ui/LinkButton";
 
 type Status = "form" | "submitting" | "success";
 
 const inputClass =
-  "w-full rounded-lg border border-taupe/30 bg-warm-ivory px-4 py-3 font-body text-espresso placeholder:text-espresso/40 transition-colors focus:border-gold focus:ring-2 focus:ring-gold/50 focus:outline-none sm:py-3.5";
+  "w-full rounded-lg border border-taupe/30 bg-warm-ivory px-4 py-3 font-body text-espresso placeholder:text-espresso/55 transition-colors focus:border-gold focus:ring-2 focus:ring-gold/50 focus:outline-none sm:py-3.5";
 const labelClass = "font-body text-sm text-espresso/80";
 
 /** Small check mark used inside the selected attendance card. */
@@ -20,7 +22,7 @@ function CheckIcon() {
 }
 
 export function RsvpForm() {
-  const { rsvp } = useWeddingContent();
+  const { rsvp, reception } = useWeddingContent();
   const [status, setStatus] = useState<Status>("form");
   const [renderedAt] = useState(() => Date.now());
 
@@ -78,18 +80,16 @@ export function RsvpForm() {
   // it, with generous top margin so it reads as an aside, not part of the
   // form's own visual weight.
   const contactNote = (
-    <p className="mt-6 max-w-sm text-center font-body text-xs leading-relaxed text-espresso/60 sm:mt-10">
+    <p className="mt-6 max-w-sm text-center font-body text-xs leading-relaxed text-espresso/80 sm:mt-10">
       {rsvp.guestQuestionNote}
-      <span className="mt-2 flex justify-center gap-4">
-        {Object.values(rsvp.whatsapp).map((contact) => (
+      <span className="mt-2 flex flex-col items-center gap-1 sm:flex-row sm:justify-center sm:gap-4">
+        {Object.values(rsvp.contacts).map((contact) => (
           <a
             key={contact.name}
-            href={contact.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`tel:${contact.phone.replace(/\s+/g, "")}`}
             className="underline decoration-gold/50 underline-offset-4 hover:text-espresso"
           >
-            {contact.name}
+            {contact.name}: {contact.phone}
           </a>
         ))}
       </span>
@@ -97,10 +97,26 @@ export function RsvpForm() {
   );
 
   if (status === "success") {
+    const receptionCalendarUrl = buildGoogleCalendarUrl({
+      title: reception.title,
+      description: reception.note,
+      location: `${reception.place}, ${reception.address}`,
+      startUTC: reception.startUTC,
+      endUTC: reception.endUTC,
+    });
+
     return (
       <div className="mt-8 flex flex-col items-center text-center" role="status" aria-live="polite">
         <p className="font-display text-2xl text-espresso">{rsvp.successTitle}</p>
         <p className="mt-2 max-w-sm font-body text-espresso/80">{rsvp.successBody}</p>
+        {/* Only offered once the guest is actually confirmed as attending — and
+            only for the reception. The couple already knows who's coming to
+            the temple sealing, so no calendar invite is offered for that. */}
+        {attending === "yes" && (
+          <LinkButton href={receptionCalendarUrl} variant="outline" className="mt-6">
+            {reception.addToCalendarCta}
+          </LinkButton>
+        )}
       </div>
     );
   }

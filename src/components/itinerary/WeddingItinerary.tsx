@@ -1,177 +1,86 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { ItineraryPath } from "./ItineraryPath";
-import { ItineraryEvent, type ItineraryEventData } from "./ItineraryEvent";
-import { buildVine } from "@/lib/path/windingPath";
+import { ItineraryEvent, STAGGER_STEP, type ItineraryEventData } from "./ItineraryEvent";
+import { ItineraryRowLine, ItineraryNode } from "./ItineraryLine";
 
 interface WeddingItineraryProps {
   events: ItineraryEventData[];
 }
 
-interface MeasuredPoint {
-  x: number;
-  y: number;
+const ROW_SIZE = 3;
+/** Matches ItineraryRowLine's own left-[16.6%]/right-[16.6%] span, so a row's connector lines up exactly with its outer nodes. */
+const EDGE_OFFSET = "16.6%";
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const rows: T[][] = [];
+  for (let i = 0; i < items.length; i += size) rows.push(items.slice(i, i + size));
+  return rows;
 }
 
-const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-
-/** Keeps a node clear of both the illustration it belongs to and the trunk running down the middle. */
-const NODE_EDGE_MARGIN = 9;
-
 /**
- * How far each row's stop is pulled inward, toward the vine, in pixels —
- * cycled row by row so alternating rows sit at a different distance from
- * center instead of every stop sitting exactly as far out as the last.
- * Real DOM measurement in `measure()` below picks up wherever each
- * illustration actually lands after this, so the branch reaching it comes
- * out correspondingly longer or shorter with no separate bookkeeping.
+ * A short vertical drop connecting the end of one row to the start of the
+ * next — physical `left`/`right` CSS offsets are unaffected by a
+ * direction:rtl parent, so this lines up correctly regardless of which row
+ * it's following.
  */
-const ROW_INSET_PX = [0, 30, 10, 38];
+function RowConnector({ side }: { side: "left" | "right" }) {
+  return (
+    <div className="relative h-12 sm:h-16" aria-hidden="true">
+      <div className="absolute top-0 bottom-0 w-px bg-gold/50" style={{ [side]: EDGE_OFFSET }} />
+    </div>
+  );
+}
 
 /**
- * The itinerary as a compact two-column grid with a central botanical vine
- * threaded behind it — a short branch reaches from the vine to each
- * stop's node. Nodes sit BETWEEN the illustration and the vine (not
- * pinned to the illustration's edge, and not at the whole event block's
- * center) so the image reads as visually associated with its node rather
- * than the vine stretching all the way out to touch the image — that's
- * what was forcing long, nearly-horizontal branches. Every measurement —
- * and the vine geometry itself — happens in one consistent pixel space
- * (the SVG viewBox matches the container's real width/height exactly), so
- * nodes sit exactly where each illustration actually is with no separate
- * positioning system to keep in sync. Positions are measured (not
- * assumed) because subtitles vary enough in length that a fixed row
- * height would either clip the long ones or waste space on the short
- * ones, so the grid sizes itself in normal flow and a ResizeObserver
- * reports the real layout back for the vine to follow.
+ * The wedding-day itinerary: rows of three stops, read boustrophedon-style
+ * ("as the ox plows") — row one left-to-right, row two right-to-left, row
+ * three left-to-right again — so the nine stops read as one continuous
+ * winding path down the page instead of three disconnected groups, while
+ * still only needing three rows of height.
+ *
+ * Reversed rows flip via CSS `direction: rtl` on the grid (which reverses
+ * visual column order without touching DOM order, so time/reading order
+ * stays chronological for anyone tabbing through) — each event's own
+ * content resets `direction: ltr` so its text still reads normally.
+ *
+ * Still has NO layout measurement of any kind — every line and node
+ * position comes from the fixed 3-column grid via plain CSS, so nothing
+ * here can end up mismatched with the real content on any device.
  */
 export function WeddingItinerary({ events }: WeddingItineraryProps) {
   const reducedMotion = !!useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const itemEls = useRef<(HTMLDivElement | null)[]>([]);
-  const [layout, setLayout] = useState<{
-    width: number;
-    height: number;
-    /** Horizontal room between the itinerary's center and the nearest illustration edge — the free channel the vine and its decorations have to live in. */
-    channelHalf: number;
-    points: MeasuredPoint[];
-  } | null>(null);
-
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    function measure() {
-      const containerRect = container!.getBoundingClientRect();
-      const centerX = containerRect.width / 2;
-
-      // The innermost edges the illustrations reach toward the center —
-      // everything the vine draws has to stay inside this channel, since
-      // the event cards paint on top of the SVG.
-      let leftInnerEdge = 0;
-      let rightInnerEdge = containerRect.width;
-
-      const points = itemEls.current.map((el, i): MeasuredPoint => {
-        if (!el) return { x: centerX, y: 0 };
-
-        const eventRect = el.getBoundingClientRect();
-        const illustration = el.querySelector<HTMLElement>("[data-itinerary-illustration]");
-        const illustrationRect = illustration?.getBoundingClientRect() ?? eventRect;
-        const isLastCentered = events.length % 2 === 1 && i === events.length - 1;
-
-        const illustrationLeft = illustrationRect.left - containerRect.left;
-        const illustrationRight = illustrationRect.right - containerRect.left;
-
-        // Final centered event: end the vine directly above the illustration.
-        // It spans both columns, so it never constrains the side channel.
-        if (isLastCentered) {
-          return {
-            x: illustrationLeft + illustrationRect.width / 2,
-            y: illustrationRect.top - containerRect.top - 22,
-          };
-        }
-
-        const isLeft = i % 2 === 0;
-        if (isLeft) leftInnerEdge = Math.max(leftInnerEdge, illustrationRight);
-        else rightInnerEdge = Math.min(rightInnerEdge, illustrationLeft);
-
-        // The node is NOT pinned to the illustration's edge — it lives
-        // BETWEEN the illustration and the central vine, so the image
-        // reads as visually associated with its node rather than the vine
-        // stretching out to touch the image (which was forcing long,
-        // nearly-horizontal branches). On narrow screens the columns get
-        // close enough that this preferred spot would land *inside* the
-        // illustration, where the card (which paints above the SVG) hides
-        // it — so it's clamped into the free channel instead.
-        const illustrationCenterX = illustrationLeft + illustrationRect.width / 2;
-        const illustrationCenterY = illustrationRect.top - containerRect.top + illustrationRect.height * 0.62;
-        // 0 = itinerary center, 1 = illustration center.
-        const NODE_POSITION = 0.5;
-        const preferredX = centerX + (illustrationCenterX - centerX) * NODE_POSITION;
-
-        const lowerBound = isLeft ? illustrationRight + NODE_EDGE_MARGIN : centerX + NODE_EDGE_MARGIN;
-        const upperBound = isLeft ? centerX - NODE_EDGE_MARGIN : illustrationLeft - NODE_EDGE_MARGIN;
-        const x =
-          upperBound > lowerBound
-            ? clamp(preferredX, lowerBound, upperBound)
-            : // Channel too tight for the margins — sit midway between the
-              // illustration edge and the center rather than overlapping.
-              (centerX + (isLeft ? illustrationRight : illustrationLeft)) / 2;
-
-        return { x, y: illustrationCenterY };
-      });
-
-      const channelHalf = Math.max(12, Math.min(centerX - leftInnerEdge, rightInnerEdge - centerX));
-      setLayout({
-        width: container!.offsetWidth,
-        height: container!.offsetHeight,
-        channelHalf,
-        points,
-      });
-    }
-
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [events.length]);
-
-  const vine = useMemo(
-    () =>
-      layout
-        ? buildVine(layout.points, layout.width, layout.channelHalf)
-        : { mainD: "", branches: [], curls: [], leaves: [] },
-    [layout]
-  );
-  const isOdd = events.length % 2 === 1;
+  const rows = chunk(events, ROW_SIZE);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative grid grid-cols-2 items-start gap-x-4 gap-y-1 px-2 pt-20 sm:gap-x-8 sm:gap-y-3 sm:px-8 md:px-16 lg:px-24"
-    >
-      <ItineraryPath
-        stops={layout?.points ?? []}
-        vine={vine}
-        width={layout?.width ?? 0}
-        height={layout?.height ?? 0}
-        reducedMotion={reducedMotion}
-      />
-      {events.map((event, i) => (
-        <ItineraryEvent
-          key={event.title}
-          event={event}
-          reducedMotion={reducedMotion}
-          spanFull={isOdd && i === events.length - 1}
-          side={i % 2 === 0 ? "left" : "right"}
-          insetPx={ROW_INSET_PX[Math.floor(i / 2) % ROW_INSET_PX.length]}
-          rowRef={(el) => {
-            itemEls.current[i] = el;
-          }}
-        />
-      ))}
+    <div className="px-2 sm:px-8 md:px-16 lg:px-24">
+      {rows.map((row, ri) => {
+        const reversed = ri % 2 === 1;
+        return (
+          <div key={ri}>
+            <div
+              className="relative grid grid-cols-3 gap-x-2 sm:gap-x-6"
+              style={{ direction: reversed ? "rtl" : "ltr" }}
+            >
+              <ItineraryRowLine />
+              {row.map((event, ci) => {
+                const index = ri * ROW_SIZE + ci;
+                return (
+                  <div
+                    key={event.title}
+                    className="relative z-10 flex flex-col items-center gap-5 sm:gap-7"
+                    style={{ direction: "ltr" }}
+                  >
+                    <ItineraryNode reducedMotion={reducedMotion} delay={index * STAGGER_STEP} />
+                    <ItineraryEvent event={event} reducedMotion={reducedMotion} index={index} />
+                  </div>
+                );
+              })}
+            </div>
+            {ri < rows.length - 1 && <RowConnector side={reversed ? "left" : "right"} />}
+          </div>
+        );
+      })}
     </div>
   );
 }

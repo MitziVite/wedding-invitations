@@ -244,7 +244,7 @@ export function WelcomeCard() {
               <span suppressHydrationWarning className="font-display text-4xl text-espresso tabular-nums sm:text-5xl lg:text-6xl">
                 {u.value}
               </span>
-              <span className="mt-1 font-body text-[10px] tracking-[0.18em] text-espresso/60 uppercase sm:mt-2">
+              <span className="mt-1 font-body text-[10px] tracking-[0.18em] text-espresso/80 uppercase sm:mt-2">
                 {u.label}
               </span>
             </div>

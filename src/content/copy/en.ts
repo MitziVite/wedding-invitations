@@ -44,6 +44,9 @@ export const weddingContent: WeddingContent = {
     noteAuthor: "Gordon B. Hinckley",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
+    startUTC: "2026-11-07T17:00:00Z",
+    endUTC: "2026-11-07T18:00:00Z",
+    addToCalendarCta: "Add to calendar",
   },
 
   reception: {
@@ -57,6 +60,9 @@ export const weddingContent: WeddingContent = {
     note: "Let's celebrate together with dinner, music, and dancing.",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=1713%20E%20Erickson%20Knl%20Ln%2C%20Eagle%20Mountain%2C%20UT%2084005",
+    startUTC: "2026-11-07T23:30:00Z",
+    endUTC: "2026-11-08T03:30:00Z",
+    addToCalendarCta: "Add to calendar",
   },
 
   timeline: {
@@ -141,7 +147,7 @@ export const weddingContent: WeddingContent = {
     plusOneYes: "Yes",
     plusOneNo: "No",
     plusOneNamePlaceholder: "Your guest's name",
-    childrenLabel: "How many children will be joining you?",
+    childrenLabel: "If children will be joining you, how many?",
     childrenIncrease: "Add a child",
     childrenDecrease: "Remove a child",
     messageLabel: "Want to leave us a message?",
@@ -153,9 +159,9 @@ export const weddingContent: WeddingContent = {
     successBody: "We've recorded your response. See you soon.",
     errorBody: "There was a problem sending your response. Please try again or message us directly.",
     guestQuestionNote: "Questions about how many people can attend with you? Message us directly.",
-    whatsapp: {
-      mitzi: { name: "Mitzi", url: "https://wa.me/00000000000" },
-      josh: { name: "Josh", url: "https://wa.me/00000000000" },
+    contacts: {
+      mitzi: { name: "Mitzi", phone: "+1 385 439 1623" },
+      josh: { name: "Josh", phone: "+1 208 450 7301" },
     },
   },
 

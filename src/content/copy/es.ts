@@ -51,6 +51,10 @@ export const weddingContent: WeddingContent = {
     noteAuthor: "Gordon B. Hinckley",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=987%20South%20Ensign%20Drive%2C%20Saratoga%20Springs%2C%20UT%2084045-3839",
+    // 10:00–11:00 a. m. Mountain Standard Time (UTC-7 on Nov 7, 2026 — DST has ended).
+    startUTC: "2026-11-07T17:00:00Z",
+    endUTC: "2026-11-07T18:00:00Z",
+    addToCalendarCta: "Agregar al calendario",
   },
 
   reception: {
@@ -62,6 +66,10 @@ export const weddingContent: WeddingContent = {
     place: "The Barn at Eagle Mountain",
     address: "1713 E Erickson Knl Ln, Eagle Mountain, UT 84005",
     note: "Celebremos juntos con cena, música y baile.",
+    // 4:30–8:30 p. m. Mountain Standard Time.
+    startUTC: "2026-11-07T23:30:00Z",
+    endUTC: "2026-11-08T03:30:00Z",
+    addToCalendarCta: "Agregar al calendario",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=1713%20E%20Erickson%20Knl%20Ln%2C%20Eagle%20Mountain%2C%20UT%2084005",
   },
@@ -151,7 +159,7 @@ export const weddingContent: WeddingContent = {
     plusOneYes: "Sí",
     plusOneNo: "No",
     plusOneNamePlaceholder: "Nombre de tu acompañante",
-    childrenLabel: "¿Cuántos niños vendrán contigo?",
+    childrenLabel: "Si asistirán niños contigo, ¿cuántos?",
     childrenIncrease: "Agregar un niño",
     childrenDecrease: "Quitar un niño",
     messageLabel: "¿Quieres dejarnos un mensaje?",
@@ -164,10 +172,11 @@ export const weddingContent: WeddingContent = {
     errorBody: "Hubo un problema al enviar tu respuesta. Intenta de nuevo o escríbenos directamente.",
     guestQuestionNote: "¿Tienes dudas sobre cuántas personas pueden asistir contigo? Escríbenos directamente.",
     // Replace with the couple's real numbers before sending invitations —
-    // wa.me links, digits only, country code included, no symbols.
-    whatsapp: {
-      mitzi: { name: "Mitzi", url: "https://wa.me/00000000000" },
-      josh: { name: "Josh", url: "https://wa.me/00000000000" },
+    // no dependency on WhatsApp, shown and dialed as plain phone numbers
+    // since not every guest uses it.
+    contacts: {
+      mitzi: { name: "Mitzi", phone: "+1 385 439 1623" },
+      josh: { name: "Josh", phone: "+1 208 450 7301" },
     },
   },
 
