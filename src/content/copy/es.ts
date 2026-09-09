@@ -117,7 +117,7 @@ export const weddingContent: WeddingContent = {
         alt: "Ilustración acuarela de los novios bailando",
       },
       {
-        time: "6:15 p. m.",
+        time: "6:20 p. m.",
         title: "Unas palabras",
         subtitle: "Con todo nuestro cariño",
         image: "/images/itinerary/palabras.png",

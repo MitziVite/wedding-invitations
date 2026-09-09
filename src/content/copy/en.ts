@@ -105,7 +105,7 @@ export const weddingContent: WeddingContent = {
         alt: "Watercolor illustration of the couple dancing",
       },
       {
-        time: "6:15 p.m.",
+        time: "6:20 p.m.",
         title: "A few words",
         subtitle: "With all our love",
         image: "/images/itinerary/palabras.png",

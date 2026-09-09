@@ -1,11 +1,19 @@
 export type FloralVariant = "sprig" | "flower";
-export type FloralCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+export type FloralCorner =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right"
+  | "mid-left"
+  | "mid-right";
 
 const CORNER_POSITION: Record<FloralCorner, string> = {
   "top-left": "top-6 left-6",
   "top-right": "top-6 right-6",
   "bottom-left": "bottom-6 left-6",
   "bottom-right": "bottom-6 right-6",
+  "mid-left": "top-1/2 left-6",
+  "mid-right": "top-1/2 right-6",
 };
 
 /** Same pointed "vesica" leaf silhouette used by the itinerary vine (windingPath.ts's leafShape) — tapers to a point at both base and tip, bulging in the middle. */
@@ -50,12 +58,13 @@ interface CornerFloralProps {
 export function CornerFloral({ variant, corner, className = "" }: CornerFloralProps) {
   const flipX = corner.endsWith("right") ? -1 : 1;
   const flipY = corner.startsWith("top") ? -1 : 1;
+  const vCenter = corner.startsWith("mid") ? "translateY(-50%) " : "";
 
   return (
     <div
       aria-hidden="true"
       className={`pointer-events-none absolute hidden text-gold sm:block ${CORNER_POSITION[corner]} ${className}`}
-      style={{ transform: `scale(${flipX}, ${flipY})`, opacity: 0.42 }}
+      style={{ transform: `${vCenter}scale(${flipX}, ${flipY})`, opacity: 0.42 }}
     >
       {variant === "sprig" ? (
         <svg width="52" height="66" viewBox="0 0 70 90" fill="none">
