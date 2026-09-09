@@ -195,7 +195,7 @@ export const weddingContent: WeddingContent = {
       },
       {
         q: "¿Cómo debo vestir?",
-        a: "La celebración será de etiqueta formal: vestido largo para ellas y traje para ellos. Te pedimos reservar el blanco para la novia.",
+        a: "Ropa de domingo — tu mejor atuendo, como para ir a la iglesia. Te pedimos reservar el blanco para la novia.",
       },
       {
         q: "¿Habrá estacionamiento?",

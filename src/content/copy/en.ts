@@ -180,7 +180,7 @@ export const weddingContent: WeddingContent = {
       },
       {
         q: "What's the dress code?",
-        a: "The celebration will be formal attire: long dress for the ladies and suit for the gentlemen. We kindly ask that white be reserved for the bride.",
+        a: "Sunday best — think your nicest church clothes. We kindly ask that white be reserved for the bride.",
       },
       {
         q: "Will there be parking?",
