@@ -29,6 +29,30 @@ export default function Home() {
   const [debugReveal] = useState(() => hasParam(DEBUG_REVEAL_PARAM));
   const [calibrate] = useState(() => hasParam(CALIBRATE_PARAM));
 
+  // `svh` is a static value computed once — it never reacts to something
+  // like a browser-injected "Translate this page?" banner shrinking the
+  // real visible area afterward, which left the welcome section's photo
+  // peeking in under the hero. Measuring window.innerHeight ourselves and
+  // reacting to `resize` (not to scroll) gives the real current height
+  // without reintroducing the janky continuous-recalculation-during-drag
+  // behavior `dvh` had — resize fires once a browser-chrome change has
+  // settled, not on every scroll frame.
+  useEffect(() => {
+    let raf = 0;
+    function updateHeroHeight() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        document.documentElement.style.setProperty("--hero-vh", `${window.innerHeight}px`);
+      });
+    }
+    updateHeroHeight();
+    window.addEventListener("resize", updateHeroHeight);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", updateHeroHeight);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const params = new URLSearchParams(window.location.search);
     // Calibration mode skips the envelope so the full garden is shown immediately.
@@ -61,7 +85,7 @@ export default function Home() {
     <>
       <main className="relative w-full">
         {/* Full-viewport hero: the envelope opens to reveal the garden. */}
-        <section className="relative h-svh w-full overflow-hidden">
+        <section className="relative w-full overflow-hidden" style={{ height: "var(--hero-vh, 100svh)" }}>
           <GardenHero
             revealed={stage !== "idle"}
             reducedMotion={reducedMotion}

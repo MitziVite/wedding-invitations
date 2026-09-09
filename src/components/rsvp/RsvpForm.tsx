@@ -106,7 +106,15 @@ export function RsvpForm() {
     });
 
     return (
-      <div className="mt-8 flex flex-col items-center text-center" role="status" aria-live="polite">
+      <div
+        // Reserves roughly the same height as the form it replaces so the
+        // RSVP section doesn't shrink on confirm — without this, the
+        // section (and the calendar link inside it) would jump up and
+        // the FAQ section below would peek into view.
+        className="mt-8 flex min-h-[28rem] w-full flex-col items-center justify-center text-center sm:min-h-[34rem]"
+        role="status"
+        aria-live="polite"
+      >
         <p className="font-display text-2xl text-espresso">{rsvp.successTitle}</p>
         <p className="mt-2 max-w-sm font-body text-espresso/80">{rsvp.successBody}</p>
         {/* Only offered once the guest is actually confirmed as attending — and
