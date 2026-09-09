@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { HeroTextOverlay } from "./HeroTextOverlay";
 import { GardenLanternGlow } from "./GardenLanternGlow";
 import { SparkleField } from "./SparkleField";
+import { ScrollHint } from "./ScrollHint";
 import { LanternCalibrator } from "./LanternCalibrator";
 import { useElementSize } from "./useElementSize";
 import { coverBox, GARDEN_INTRINSIC } from "./coverGeometry";
@@ -205,6 +206,8 @@ export function GardenHero({
         visible={typographyVisible}
         reducedMotion={reducedMotion}
       />
+
+      <ScrollHint visible={typographyVisible} reducedMotion={reducedMotion} />
 
       {calibrate && <LanternCalibrator />}
     </div>

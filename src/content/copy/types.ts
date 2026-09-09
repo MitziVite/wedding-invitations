@@ -134,5 +134,6 @@ export interface WeddingContent {
     mapCta: string;
     skipIntro: string;
     openInvitationAria: string;
+    scrollDownAria: string;
   };
 }

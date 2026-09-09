@@ -232,5 +232,6 @@ export const weddingContent: WeddingContent = {
     mapCta: "Ver mapa",
     skipIntro: "Saltar introducción",
     openInvitationAria: "Abrir la invitación",
+    scrollDownAria: "Ir a la siguiente sección",
   },
 };
