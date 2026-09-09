@@ -55,6 +55,27 @@ export default function Home() {
     };
   }, []);
 
+  // Works around a real iOS Safari bug (confirmed: reproduces on an actual
+  // iPhone but NOT in Chrome DevTools' mobile emulation, which doesn't run
+  // Safari's real compositor) where 2D content sharing the very first
+  // paint with a new 3D-transform layer — the envelope's
+  // perspective/rotateY panels — can be mis-ordered until something forces
+  // a fresh compositing pass. A reload naturally forces that pass; this
+  // nudges the whole document's compositing the same way, right after
+  // mount, without needing an actual reload. Moving the controls to be a
+  // sibling (not nested) wasn't enough on its own — the bug turned out to
+  // be about the 3D layer existing anywhere on the page during first
+  // paint, not about DOM nesting.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      document.body.style.transform = "translateZ(0)";
+      requestAnimationFrame(() => {
+        document.body.style.transform = "";
+      });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   useLayoutEffect(() => {
     const params = new URLSearchParams(window.location.search);
     // Calibration mode skips the envelope so the full garden is shown immediately.
