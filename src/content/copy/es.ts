@@ -171,6 +171,7 @@ export const weddingContent: WeddingContent = {
     successBody: "Ya registramos tu respuesta. Nos vemos pronto.",
     errorBody: "Hubo un problema al enviar tu respuesta. Intenta de nuevo o escríbenos directamente.",
     guestQuestionNote: "¿Tienes dudas sobre cuántas personas pueden asistir contigo? Escríbenos directamente.",
+    calendarEventTitle: "Boda Mitzi y Josh <3",
     // Replace with the couple's real numbers before sending invitations —
     // no dependency on WhatsApp, shown and dialed as plain phone numbers
     // since not every guest uses it.
@@ -225,7 +226,7 @@ export const weddingContent: WeddingContent = {
     body: "Tu presencia es nuestro mejor regalo. Si deseas obsequiarnos algo, aquí te dejamos algunas opciones.",
     options: [
       { label: "Mesa de regalos Amazon", url: "https://www.amazon.com/wedding/guest-view/L6M37HAVA21S" },
-      { label: "Mesa de regalos Walmart", url: "https://www.walmart.com/registry/WR/5c3f1024-fe75-4095-8a5f-d43c77398ba2" },
+      { label: "Venmo", url: "https://venmo.com/u/MitziVite" },
     ],
   },
 

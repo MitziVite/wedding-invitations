@@ -159,6 +159,7 @@ export const weddingContent: WeddingContent = {
     successBody: "We've recorded your response. See you soon.",
     errorBody: "There was a problem sending your response. Please try again or message us directly.",
     guestQuestionNote: "Questions about how many people can attend with you? Message us directly.",
+    calendarEventTitle: "Mitzi and Josh's Wedding <3",
     contacts: {
       mitzi: { name: "Mitzi", phone: "+1 385 439 1623" },
       josh: { name: "Josh", phone: "+1 208 450 7301" },
@@ -210,7 +211,7 @@ export const weddingContent: WeddingContent = {
     body: "Your presence is our greatest gift. If you'd like to give us something, here are a few options.",
     options: [
       { label: "Amazon registry", url: "https://www.amazon.com/wedding/guest-view/L6M37HAVA21S" },
-      { label: "Walmart registry", url: "https://www.walmart.com/registry/WR/5c3f1024-fe75-4095-8a5f-d43c77398ba2" },
+      { label: "Venmo", url: "https://venmo.com/u/MitziVite" },
     ],
   },
 

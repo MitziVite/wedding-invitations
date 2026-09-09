@@ -98,7 +98,7 @@ export function RsvpForm() {
 
   if (status === "success") {
     const receptionCalendarUrl = buildGoogleCalendarUrl({
-      title: reception.title,
+      title: rsvp.calendarEventTitle,
       description: reception.note,
       location: `${reception.place}, ${reception.address}`,
       startUTC: reception.startUTC,

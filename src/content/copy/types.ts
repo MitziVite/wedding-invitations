@@ -113,6 +113,8 @@ export interface WeddingContent {
     successBody: string;
     errorBody: string;
     guestQuestionNote: string;
+    /** Event title for the "add to Google Calendar" link — the wedding as a whole, not just "Reception". */
+    calendarEventTitle: string;
     contacts: { mitzi: PhoneContactContent; josh: PhoneContactContent };
   };
 
