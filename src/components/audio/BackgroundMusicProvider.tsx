@@ -57,6 +57,24 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
     if (audioRef.current) audioRef.current.muted = isMuted;
   }, [isMuted]);
 
+  // Locking the phone or switching away from the tab fires
+  // `visibilitychange` — pause there so the music doesn't keep playing
+  // behind the lock screen, and pick back up automatically on return
+  // (still muted if it was muted before).
+  useEffect(() => {
+    function handleVisibilityChange() {
+      const audio = audioRef.current;
+      if (!audio || !hasStartedRef.current) return;
+      if (document.hidden) {
+        audio.pause();
+      } else {
+        audio.play().catch(() => undefined);
+      }
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
   const startMusic = useCallback(() => {
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;

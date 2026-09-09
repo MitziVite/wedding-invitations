@@ -36,8 +36,14 @@ export function FairyCursor() {
     const dust = dustRef.current;
     if (!wand || !dust) return;
 
-    const prevCursor = document.body.style.cursor;
-    document.body.style.cursor = "none";
+    // A plain `body.style.cursor = "none"` gets overridden the moment the
+    // pointer is over a link, button, or anything else with its own
+    // `cursor: pointer` (browser UA defaults included) — `cursor` only
+    // inherits when an element doesn't set its own, and most interactive
+    // elements do. A universal `!important` rule beats all of those.
+    const styleEl = document.createElement("style");
+    styleEl.textContent = "* { cursor: none !important; }";
+    document.head.appendChild(styleEl);
 
     let x = -100;
     let y = -100;
@@ -108,7 +114,7 @@ export function FairyCursor() {
     window.addEventListener("blur", hide);
 
     return () => {
-      document.body.style.cursor = prevCursor;
+      styleEl.remove();
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onMove);

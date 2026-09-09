@@ -49,7 +49,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative w-full px-6 ${paddingY} ${TONE_CLASS[tone]} ${fullHeight ? "flex min-h-dvh flex-col justify-center" : ""}`}
+      className={`relative w-full px-6 ${paddingY} ${TONE_CLASS[tone]} ${fullHeight ? "flex min-h-svh flex-col justify-center" : ""}`}
     >
       {florals.map(({ variant, corner }) => (
         <CornerFloral key={corner} variant={variant} corner={corner} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import { motion, type Variants } from "framer-motion";
 
 interface WaveTextProps {
@@ -19,8 +19,12 @@ interface WaveTextProps {
 /**
  * Renders text so each character rises and fades in one after another,
  * producing a gentle left-to-right wave — the letters appearing as if
- * conjured. Spaces are real breakable text nodes, so multi-word lines still
- * wrap naturally. Reduced motion collapses the wave to a single soft fade.
+ * conjured. Each word's letters sit inside their own `white-space: nowrap`
+ * span, with a plain breakable space rendered OUTSIDE that span between
+ * words — so the browser can only break the line between words, rather
+ * than treating every individual letter span as its own independently
+ * wrappable box, which was splitting words mid-letter on narrow mobile
+ * screens. Reduced motion collapses the wave to a single soft fade.
  */
 export function WaveText({
   text,
@@ -54,6 +58,9 @@ export function WaveText({
 
   const MotionTag = as === "h1" ? motion.h1 : motion.p;
 
+  const words = text.split(" ");
+  let charIndex = 0;
+
   return (
     <MotionTag
       className={className}
@@ -62,15 +69,21 @@ export function WaveText({
       initial="hidden"
       animate={visible ? "visible" : "hidden"}
     >
-      {text.split("").map((ch, i) =>
-        ch === " " ? (
-          <Fragment key={i}> </Fragment>
-        ) : (
-          <motion.span key={i} variants={char} className="inline-block">
-            {ch}
-          </motion.span>
-        )
-      )}
+      {words.map((word, wi) => (
+        <span key={wi}>
+          {wi > 0 ? " " : null}
+          <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+            {word.split("").map((ch) => {
+              const i = charIndex++;
+              return (
+                <motion.span key={i} variants={char} className="inline-block">
+                  {ch}
+                </motion.span>
+              );
+            })}
+          </span>
+        </span>
+      ))}
     </MotionTag>
   );
 }
