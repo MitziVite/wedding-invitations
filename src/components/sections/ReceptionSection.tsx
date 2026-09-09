@@ -14,7 +14,16 @@ export function ReceptionSection() {
   const v = (variants: Variants) => (reducedMotion ? undefined : variants);
 
   return (
-    <Section id="recepcion" tone="ivory" paddingY="py-6 sm:py-24" fullHeight>
+    <Section
+      id="recepcion"
+      tone="ivory"
+      paddingY="py-6 sm:py-24"
+      fullHeight
+      florals={[
+        { variant: "sprig", corner: "bottom-left" },
+        { variant: "flower", corner: "top-right" },
+      ]}
+    >
       <motion.div
         className="flex flex-col items-center text-center"
         initial={reducedMotion ? false : "hidden"}

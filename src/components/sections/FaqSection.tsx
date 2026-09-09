@@ -7,7 +7,16 @@ import { useWeddingContent } from "@/content/LanguageProvider";
 export function FaqSection() {
   const { faq } = useWeddingContent();
   return (
-    <Section id="faq" tone="ivory" paddingY="py-8 sm:py-24" fullHeight textured>
+    <Section
+      id="faq"
+      tone="ivory"
+      paddingY="py-8 sm:py-24"
+      fullHeight
+      florals={[
+        { variant: "flower", corner: "top-right" },
+        { variant: "sprig", corner: "bottom-left" },
+      ]}
+    >
       <SectionHeading eyebrow={faq.eyebrow} title={faq.title} />
       <div className="mx-auto mt-6 flex max-w-xl flex-col divide-y divide-gold/25 border-y border-gold/25 sm:mt-10">
         {faq.items.map((item) => (

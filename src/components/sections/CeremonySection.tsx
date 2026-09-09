@@ -20,7 +20,16 @@ export function CeremonySection() {
   const v = (variants: Variants) => (reducedMotion ? undefined : variants);
 
   return (
-    <Section id="ceremonia" tone="parchment" paddingY="py-6 sm:py-24" fullHeight>
+    <Section
+      id="ceremonia"
+      tone="parchment"
+      paddingY="py-6 sm:py-24"
+      fullHeight
+      florals={[
+        { variant: "flower", corner: "top-right" },
+        { variant: "sprig", corner: "bottom-left" },
+      ]}
+    >
       <motion.div
         className="flex flex-col items-center text-center"
         initial={reducedMotion ? false : "hidden"}

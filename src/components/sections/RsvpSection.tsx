@@ -8,7 +8,17 @@ import { useWeddingContent } from "@/content/LanguageProvider";
 export function RsvpSection() {
   const { rsvp } = useWeddingContent();
   return (
-    <Section id="rsvp" tone="celadon" maxWidth="max-w-xl" paddingY="py-8 sm:py-24" fullHeight>
+    <Section
+      id="rsvp"
+      tone="celadon"
+      maxWidth="max-w-xl"
+      paddingY="py-8 sm:py-24"
+      fullHeight
+      florals={[
+        { variant: "sprig", corner: "bottom-right" },
+        { variant: "flower", corner: "top-left" },
+      ]}
+    >
       <SectionHeading eyebrow={rsvp.eyebrow} title={rsvp.title} />
       <p className="mx-auto mt-4 max-w-md text-center font-body leading-relaxed text-espresso/80 sm:mt-6">{rsvp.body}</p>
       <RsvpForm />

@@ -7,7 +7,14 @@ import { useWeddingContent } from "@/content/LanguageProvider";
 export function ThankYouSection() {
   const { thankYou } = useWeddingContent();
   return (
-    <Section id="gracias" tone="cocoa">
+    <Section
+      id="gracias"
+      tone="cocoa"
+      florals={[
+        { variant: "sprig", corner: "top-left" },
+        { variant: "flower", corner: "bottom-right" },
+      ]}
+    >
       <div className="flex flex-col items-center text-center">
         <h2 className="font-display text-5xl text-ivory sm:text-6xl">{thankYou.heading}</h2>
         <Ornament className="my-7" />

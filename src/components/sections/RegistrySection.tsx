@@ -8,7 +8,15 @@ import { useWeddingContent } from "@/content/LanguageProvider";
 export function RegistrySection() {
   const { registry } = useWeddingContent();
   return (
-    <Section id="regalos" tone="ivory" fullHeight>
+    <Section
+      id="regalos"
+      tone="ivory"
+      fullHeight
+      florals={[
+        { variant: "flower", corner: "top-left" },
+        { variant: "sprig", corner: "bottom-right" },
+      ]}
+    >
       <SectionHeading eyebrow={registry.eyebrow} title={registry.title} />
       <p className="mx-auto mt-6 max-w-md text-center font-body leading-relaxed text-espresso/85">
         {registry.body}
